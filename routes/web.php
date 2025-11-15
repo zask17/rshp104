@@ -14,11 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::get('/home', [SiteController::class, 'index'])->name('home');
+// --- RUTE HALAMAN STATIS (CLOSURE) ---
 
 Route::get('/', [SiteController::class, 'home']);
 
@@ -27,3 +23,7 @@ Route::get('/visi-misi', [SiteController::class, 'visiMisi'])->name('visi-misi')
 Route::get('/layanan-rshp', [SiteController::class, 'layananRshp'])->name('layanan-rshp');
 
 Route::get('/struktur-organisasi', [SiteController::class, 'strukturOrganisasi'])->name('struktur-organisasi');
+
+
+
+// --- RUTE HALAMAN AUTH ---

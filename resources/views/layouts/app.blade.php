@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    {{-- @include('includes.nav') --}}
+    @include('layouts.nav')
 
     <main>
         @yield('content')
