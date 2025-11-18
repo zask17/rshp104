@@ -26,4 +26,14 @@ class SiteController extends Controller
     {
         return view('pages.struktur-organisasi');
     }
+
+    public function cekKoneksi()
+    {
+        try {
+            \DB::connection()->getPdo();
+            return 'Koneksi ke database berhasil!';
+        }catch(\Exceptopn $e){
+            return 'Koneksi ke database gagal: ' . $e->getMessage();
+        }
+    }
 }

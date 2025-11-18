@@ -13,10 +13,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// CEK KONEKSI
+
+Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('site.cek-koneksi');
 
 // --- RUTE HALAMAN STATIS (CLOSURE) ---
 
-Route::get('/', [SiteController::class, 'home']);
+Route::get('/', [SiteController::class, 'home'])->name('home');
 
 Route::get('/visi-misi', [SiteController::class, 'visiMisi'])->name('visi-misi');
 
