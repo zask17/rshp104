@@ -32,7 +32,7 @@ class SiteController extends Controller
         try {
             \DB::connection()->getPdo();
             return 'Koneksi ke database berhasil!';
-        }catch(\Exceptopn $e){
+        }catch(\Exception $e){
             return 'Koneksi ke database gagal: ' . $e->getMessage();
         }
     }
