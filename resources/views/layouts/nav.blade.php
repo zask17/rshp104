@@ -1,11 +1,14 @@
 <nav>
     <div class="logo-container">
+        <a href="https://ibb.co.com/qLLWXNZ3">
+            <img src="https://i.ibb.co.com/Fkk0N5PL/LOGO-UNAIR.png" alt="LOGO-UNAIR" class="logo">
+        </a>
 
-        <a href="https://ibb.co.com/N6h1LFtv"><img src="https://i.ibb.co.com/PZpT5rFL/unair-pinggit-biru.jpg"
-                alt="Logo UNAIR" class="logo"></a>
-        <a href="https://ibb.co.com/r9FZgtH"><img src="https://i.ibb.co.com/5ZG5d9L/rshp.png" alt="rshp"
-                class="logo"></a>
+        <a href="https://ibb.co.com/r9FZgtH">
+            <img src="https://i.ibb.co.com/5ZG5d9L/rshp.png" alt="Logo RSHP" class="logo">
+        </a>
     </div>
+
 
     <ul>
         <li>

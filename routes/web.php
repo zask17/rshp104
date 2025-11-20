@@ -30,4 +30,6 @@ Route::get('/struktur-organisasi', [SiteController::class, 'strukturOrganisasi']
 
 // --- RUTE HALAMAN AUTH ---
 
+Auth::routes();
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
