@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Site\SiteController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +32,19 @@ Route::get('/struktur-organisasi', [SiteController::class, 'strukturOrganisasi']
 
 // --- RUTE HALAMAN AUTH ---
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+// LOGIN
+Route::get('/login', [SiteController::class, 'showLogin'])->name('login');
+Route::post('/login', [SiteController::class, 'login'])->name('login.process');
+
+// REGISTER
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
+
+
+// LOGOUT
+Route::post('/logout', [SiteController::class, 'logout'])->name('logout');
