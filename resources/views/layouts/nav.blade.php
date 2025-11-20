@@ -1,14 +1,15 @@
 <nav>
     <div class="logo-container">
-        <img src="https://ibb.co.com/N6h1LFtv"
-            alt="Logo UNAIR" class="logo">
-        <img src="https://ibb.co.com/r9FZgtH"
-            alt="Logo RSHP" class="logo">
+
+        <a href="https://ibb.co.com/N6h1LFtv"><img src="https://i.ibb.co.com/PZpT5rFL/unair-pinggit-biru.jpg"
+                alt="Logo UNAIR" class="logo"></a>
+        <a href="https://ibb.co.com/r9FZgtH"><img src="https://i.ibb.co.com/5ZG5d9L/rshp.png" alt="rshp"
+                class="logo"></a>
     </div>
 
     <ul>
         <li>
-            <a href="{{ url('home') }}" class="@if(request()->is('home')) active @endif">
+            <a href="{{ url('/') }}" class="@if(request()->is('home')) active @endif">
                 Home <span class="underline"></span>
             </a>
         </li>
