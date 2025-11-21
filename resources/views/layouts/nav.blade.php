@@ -9,10 +9,10 @@
         </a>
     </div>
 
-
     <ul>
+        {{-- Menu Utama --}}
         <li>
-            <a href="{{ url('/') }}" class="@if(request()->is('home')) active @endif">
+            <a href="{{ url('/') }}" class="@if(request()->is('/')) active @endif">
                 Home <span class="underline"></span>
             </a>
         </li>
@@ -34,36 +34,40 @@
                 Visi Misi & Tujuan <span class="underline"></span>
             </a>
         </li>
-    </ul>
 
-    {{-- <ul class="navbar-nav ms-auto"> --}}
-        <!-- AUTHENSIKASI -->
         @guest
-            @if (Route::has('login'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">Login <span class="underline"></span></a>
-                </li>
-
-                {{-- <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                </li> --}}
-            @endif
-
-            @if (Route::has('register'))
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('register') }}">Register <span class="underline"></span></a>
-                    {{-- <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a> --}}
-                </li>
-            @endif
-        @else
-            <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" v-pre>
-                    {{ Auth::user()->name }}
+            {{-- Login/Register jadi Dropdown --}}
+            <li class="dropdown-kustom">
+                <a href="#" onclick="return false;" class="dropdown-toggle-kustom">
+                    Masuk <span class="underline"></span>
                 </a>
 
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                                 document.getElementById('logout-form').submit();">
+                {{-- Konten Dropdown (Perlu CSS Tambahan) --}}
+                <div class="dropdown-menu-kustom">
+                    @if (Route::has('login'))
+                        <a href="{{ route('login') }}" class="dropdown-item-kustom">{{ __('Login') }}</a>
+                    @endif
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="dropdown-item-kustom">{{ __('Register') }}</a>
+                    @endif
+                </div>
+            </li>
+
+
+        @else
+            {{-- Tampilan setelah Login (Dropdown Nama User) --}}
+            <li class="dropdown-kustom">
+                <a id="navbarDropdown" href="#" onclick="return false;" class="dropdown-toggle-kustom">
+                    {{ ucwords(Auth::user()->nama) }} <span class="underline"></span>
+                </a>
+
+                <div class="dropdown-menu-kustom" aria-labelledby="navbarDropdown">
+                    
+                    <a class="dropdown-item-kustom" href="{{ route('home') }}">Dashboard</a>
+
+                    {{-- Logout --}}
+                    <a class="dropdown-item-kustom" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                     document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
                     </a>
 
@@ -74,5 +78,4 @@
             </li>
         @endguest
     </ul>
-
 </nav>
