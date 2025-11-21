@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
 {
-        public function home()
+    public function home()
     {
         return view('pages.home');
     }
@@ -34,7 +34,7 @@ class SiteController extends Controller
         try {
             DB::connection()->getPdo();
             return 'Koneksi ke database berhasil!';
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return 'Koneksi ke database gagal: ' . $e->getMessage();
         }
     }
@@ -48,6 +48,27 @@ class SiteController extends Controller
         return view('auth.login');
     }
 
+    // public function login(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email'    => ['required', 'email'],
+    //         'password' => ['required'],
+    //     ]);
+
+    //     if (Auth::attempt($credentials)) {
+    //         $request->session()->regenerate();
+    //         return redirect()->intended('/');
+    //     }
+
+    //     return back()->withErrors([
+    //         'email' => 'Email atau password salah.',
+    //     ]);
+    // }
+
+
+
+    // app/Http/Controllers/Site/SiteController.php (Fungsi login)
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -56,14 +77,28 @@ class SiteController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/');
+            $user = Auth::user();
+
+            // Pengecekan Role
+            if ($user->role && $user->role->role->idrole == 1) {
+                $request->session()->regenerate();
+                return redirect()->intended(route('admin.dashboard'));
+            }
+
+            // Jika bukan Administrator atau tidak memiliki role aktif
+            if (!$user->role || $user->role->role->idrole > 5) {
+                // Logout pengguna karena tidak memenuhi kriteria akses
+                Auth::logout();
+                $request->session()->invalidate();
+                return back()->withErrors(['email' => 'Anda tidak memiliki role yang diizinkan untuk mengakses sistem.']);
+            }
         }
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ]);
     }
+
 
     public function logout(Request $request)
     {
@@ -74,9 +109,4 @@ class SiteController extends Controller
 
         return redirect('/');
     }
-
-
-
-
-
 }

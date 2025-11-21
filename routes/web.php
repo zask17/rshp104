@@ -4,6 +4,7 @@ use App\Http\Controllers\Site\SiteController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,3 +49,17 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 
 // LOGOUT
 Route::post('/logout', [SiteController::class, 'logout'])->name('logout');
+
+// YANG BISA DIAKSES ADMIN
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Pengganti admindashboard.php
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    // Pengganti data_master.php
+    Route::get('/datamaster', [AdminController::class, 'dataMaster'])->name('datamaster');
+
+    // Rute sub-menu datamaster
+    Route::get('/datamaster/user', function () { return view('admin.datamaster.data_user'); })->name('datamaster.user');
+    // ... Tambahkan rute sub-menu lainnya di sini ...
+});

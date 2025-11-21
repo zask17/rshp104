@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\RoleUser;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -63,5 +65,16 @@ class User extends Authenticatable
     public function pemilik()
     {
         return $this->hasOne(Pemilik::class, 'iduser', 'iduser');
+    }
+
+    public function role()
+    {
+        return $this->hasOne(RoleUser::class, 'iduser', 'iduser')
+                    ->where('status', 1);
+    }
+
+    public function isAdministrator()
+    {
+        return $this->role()->first()->role->nama_role === 'Administrator';
     }
 }

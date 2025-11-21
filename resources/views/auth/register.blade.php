@@ -3,7 +3,7 @@
 @section('content')
 <div class="login-container">
     <div style="text-align: center; margin-bottom: 20px;">
-        <h2>{{ __('Login') }}</h2>
+        <h2>{{ __('Register') }}</h2>
     </div>
 
     <form method="POST" action="{{ route('login') }}" class="login-form">
