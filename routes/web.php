@@ -33,6 +33,7 @@ Route::get('/layanan-rshp', [SiteController::class, 'layananRshp'])->name('layan
 Route::get('/struktur-organisasi', [SiteController::class, 'strukturOrganisasi'])->name('struktur-organisasi');
 
 
+
 // --- RUTE HALAMAN LOGIN ---
 
 // LOGIN
@@ -66,4 +67,4 @@ Route::get('/admin/pemilik', [App\Http\Controllers\Admin\jenisHewanController::c
 // AKSES RESEPSIONIS
 Route::middleware('isResepionis')->group(function() {
     Route::get('/resepsionis/dashboard', [App\Http\Controllers\Resepsionis\DashboardResepsionisController::class, 'index'])->name('resepsionis.dashboard');
-})
+});

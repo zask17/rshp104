@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\Validator;
 
 class LoginController extends Controller
 {
@@ -70,15 +71,15 @@ class LoginController extends Controller
 
         switch ($userRole) {
             case '1':
-            return redirect()->route()('admin.datamaster.datamaster')->with('Success', 'Login bergasil!');
+            return redirect()->route('admin.datamaster.datamaster')->with('Success', 'Login bergasil!');
             case '2':
-            return redirect()->route()('dokter.dashboard')->with('Success', 'Login bergasil!');
+            return redirect()->route('dokter.dashboard')->with('Success', 'Login bergasil!');
             case '3':
-            return redirect()->route()('perawat.dashboard')->with('Success', 'Login bergasil!');
+            return redirect()->route('perawat.dashboard')->with('Success', 'Login bergasil!');
             case '4':
-            return redirect()->route()('resepsionis.dashboard')->with('Success', 'Login bergasil!');
+            return redirect()->route('resepsionis.dashboard')->with('Success', 'Login bergasil!');
             default:
-            return redirect()->route()('pemilik.dashboard')->with('Success', 'Login bergasil!');
+            return redirect()->route('pemilik.dashboard')->with('Success', 'Login bergasil!');
         }
     }
 
