@@ -6,11 +6,7 @@
     <header class="head">
         <h1 classs="judul">Selamat Datang di RSHP Universitas Airlangga</h1>
     </header>
-
-<header class="head">
-        <h1 classs="judul">Selamat Datang di RSHP Universitas Airlangga</h1>
-    </header>
-    
+   
     <section style="padding: 2rem;">
         <table width="100%" ceellspacing="20">
             <tr>

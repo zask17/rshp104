@@ -94,10 +94,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // --- RUTE BERANDA/LANDING PAGE ---
-// Rute Home/Landing Page
-Route::get('/', function () {
-    return view('home'); // Ganti dengan view home Anda yang sebenarnya
-});
+// // Rute Home/Landing Page
+// Route::get('/', function () {
+//     return view('home'); // Ganti dengan view home Anda yang sebenarnya
+// });
 
 // Tambahkan rute login di sini jika Anda tidak menggunakan Breeze/Jetstream
 // Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
