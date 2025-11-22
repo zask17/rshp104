@@ -35,15 +35,22 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('login') }}" class="@if(request()->is('login')) active @endif">
+                Login <span class="underline"></span>
+            </a>
+            {{-- class="dropdown-item-kustom">{{ __('Login') }}</a> --}}
+        </li>
+
         @guest
-            {{-- Login/Register jadi Dropdown --}}
+            {{-- Login/Register jadi Dropdown
             <li class="dropdown-kustom">
                 <a href="#" onclick="return false;" class="dropdown-toggle-kustom">
                     Masuk <span class="underline"></span>
                 </a>
 
                 {{-- Konten Dropdown (Perlu CSS Tambahan) --}}
-                <div class="dropdown-menu-kustom">
+                {{-- <div class="dropdown-menu-kustom">
                     @if (Route::has('login'))
                         <a href="{{ route('login') }}" class="dropdown-item-kustom">{{ __('Login') }}</a>
                     @endif
@@ -51,11 +58,11 @@
                         <a href="{{ route('register') }}" class="dropdown-item-kustom">{{ __('Register') }}</a>
                     @endif
                 </div>
-            </li>
+            </li> --}}
 
 
         @else
-            {{-- Tampilan setelah Login (Dropdown Nama User) --}}
+            {{-- Tampilan setelah Login --}}
             <li class="dropdown-kustom">
                 <a id="navbarDropdown" href="#" onclick="return false;" class="dropdown-toggle-kustom">
                     {{ ucwords(Auth::user()->nama) }} <span class="underline"></span>
