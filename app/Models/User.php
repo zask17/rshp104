@@ -68,11 +68,10 @@ class User extends Authenticatable
     }
 
 
-    // public function roleUser()
-    // {
-    //     return $this->hasMany(RoleUser::class, 'iduser', 'iduser');
-    //                 // ->withPivot('status'); // Ambil kolom 'status' dari tabel pivot
-    // }
+    public function roleUser()
+    {
+        return $this->hasMany(RoleUser::class, 'iduser', 'iduser');
+    }
 
 //     /**
 //      * Mendapatkan Role aktif dari user saat ini.

@@ -55,13 +55,14 @@ Route::post('/logout', [SiteController::class, 'logout'])->name('logout');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 
 // AKSES ADMIN
 
-Route::get('/admin/jenis-hewan', [App\Http\Controllers\Admin\jenisHewanController::class, 'index'])->name('admin.jenis-hewan.index');
-Route::get('/admin/pemilik', [App\Http\Controllers\Admin\jenisHewanController::class, 'index'])->name('admin.pemilik.index');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/admin/jenis-hewan', [App\Http\Controllers\Admin\JenisHewanController::class, 'index'])->name('admin.jenis-hewan.index');
+Route::get('/admin/pemilik', [App\Http\Controllers\Admin\PemilikController::class, 'index'])->name('admin.pemilik.index');
 
 
 

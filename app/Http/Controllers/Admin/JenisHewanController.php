@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JenisHewan;
 
-class jenisHewanController extends Controller
+class JenisHewanController extends Controller
 {
         public function index()
     {

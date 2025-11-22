@@ -17,7 +17,7 @@ class isAdminisstrator
     public function handle(Request $request, Closure $next): Response
     {
         // Jika user tidak autensikassi, redirect ke login
-        if (!Auth::chack()){
+        if (!Auth::check()){
             return redirect()->route('login');
         }
 

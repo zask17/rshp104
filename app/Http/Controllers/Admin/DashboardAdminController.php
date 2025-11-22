@@ -9,6 +9,6 @@ class DashboardAdminController extends Controller
 {
     public function index()
     {
-        return view('admin.datamaster.datamaster');
+        return view('admin.dashboard-admin');
     }
 }
