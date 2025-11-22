@@ -501,7 +501,58 @@ iframe {
     transform: translateY(-5px);
 }
 
+.content {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    background: #f9fbfd;
+    border-radius: 8px;
+}
 
+.subjudul {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    /* Styling untuk h2/subjudul agar meniru gambar */
+    font-size: 24px;
+    font-weight: bold;
+    color: #001f4d;
+}
+
+/* Styling tabel agar terlihat seperti di screenshot */
+.operasional-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.operasional-table th,
+.operasional-table td {
+    border: 1px solid #ccc;
+    padding: 15px 10px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.operasional-table th {
+    background-color: #f0f0f0;
+    /* Latar belakang header lebih terang */
+    color: #1e3c72;
+    /* Warna teks header yang gelap/biru */
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+/* Gaya untuk IGD di hari Minggu */
+.full-igd {
+    text-align: center;
+    font-weight: bold;
+    color: red;
+    background-color: #fff0f0;
+    /* Latar belakang sedikit merah */
+}
 
 /* DROPDOWN */
 /* --- CSS Tambahan untuk Dropdown Kustom --- */
@@ -561,5 +612,3 @@ iframe {
     /* Menerima semua style dari nav ul li a */
     cursor: default;
 }
-
-

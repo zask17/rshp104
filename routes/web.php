@@ -21,7 +21,9 @@ use App\Http\Controllers\DashboardController;
 
 Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('site.cek-koneksi');
 
-// --- RUTE HALAMAN STATIS (CLOSURE) ---
+
+
+// --- RUTE HALAMAN AWAL ---
 
 Route::get('/', [SiteController::class, 'home'])->name('home');
 
@@ -94,7 +96,7 @@ Route::middleware(['auth'])->group(function () {
 // --- RUTE BERANDA/LANDING PAGE ---
 // Rute Home/Landing Page
 Route::get('/', function () {
-    return view('welcome'); // Ganti dengan view home Anda yang sebenarnya
+    return view('home'); // Ganti dengan view home Anda yang sebenarnya
 });
 
 // Tambahkan rute login di sini jika Anda tidak menggunakan Breeze/Jetstream

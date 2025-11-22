@@ -12,8 +12,8 @@
     <ul>
         {{-- Menu Utama --}}
         <li>
-            <a href="{{ url('/') }}" class="@if(request()->is('/')) active @endif">
-                Home <span class="underline"></span>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                Home
             </a>
         </li>
 
@@ -74,7 +74,7 @@
 
                     {{-- Logout --}}
                     <a class="dropdown-item-kustom" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                         document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
                     </a>
 

@@ -7,42 +7,32 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    /**
-     * Tampilkan halaman Dashboard sesuai dengan role pengguna.
-     * Logika otentikasi diambil dari middleware Laravel (Auth Middleware).
-     */
+    // // Lindungi Controller ini, hanya user yang sudah login bisa mengakses
+    // // Menggunakan method middleware() (Cara modern)
+    // public function middleware()
+    // {
+    //     return [
+    //         'auth' // Middleware 'auth' akan melindungi semua method di Controller ini
+    //     ];
+    // }
+
+    // Menampilkan halaman dashboard (Mengganti admindashboard.php)
     public function index()
     {
-        // 1. Ambil informasi user yang sudah terotentikasi oleh Laravel Auth
-        // Asumsi: Nama pengguna dan Role tersimpan di model User atau melalui guard.
-        // Jika Anda menggunakan data dari database, ini adalah cara untuk mengambilnya.
+        // Data user yang sedang login
         $user = Auth::user();
+        
+        //Role user disimpan di sesi (dibuat di AuthController)
+        // Jika tidak ada di sesi, fallback ke 'Administrator'
+        $role = session('user_role_name', 'Administrator');
 
-        // 2. Tentukan Role Name
-        // Dalam contoh PHP murni Anda, role diambil dari $_SESSION['role'].
-        // Di Laravel, kita asumsikan properti 'role' ada pada model User.
-        $roleName = $user->role ?? 'Akses Terbatas'; // Ganti dengan field role yang sebenarnya
-
-        // 3. Data yang akan dikirim ke view
-        $data = [
-            'user' => $user,
-            'roleName' => $roleName,
+        $user_info = [
+            'full_name' => $user->nama ?? $user->name, // Gunakan kolom 'nama' jika ada
+            'role' => $role,
+            'email_verified_at' => $user->email_verified_at,
         ];
 
-        // 4. Tampilkan view dashboard
-        return view('dashboard.index', $data);
-    }
-
-    /**
-     * Proses Logout.
-     */
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        // Arahkan ke halaman login
-        return redirect('/login');
+        // View dashboard.blade.php ada di resources/views/dashboard.blade.php
+        return view('dashboard', compact('user_info'));
     }
 }

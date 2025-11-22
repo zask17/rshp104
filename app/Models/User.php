@@ -61,11 +61,32 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+    
     public function pemilik()
     {
         return $this->hasOne(Pemilik::class, 'iduser', 'iduser');
     }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'iduser', 'idrole')
+                    ->withPivot('status'); // Ambil kolom 'status' dari tabel pivot
+    }
+
+    /**
+     * Mendapatkan Role aktif dari user saat ini.
+     * Ini mereplikasi logika 'status = 1' di login_post.php
+     *
+     * @return \App\Models\Role|null
+     */
+    public function activeRole()
+    {
+        return $this->roles()
+                    ->wherePivot('status', 1)
+                    ->first();
+    }
+
 
     public function role()
     {
