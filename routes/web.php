@@ -16,6 +16,7 @@ use App\Http\Controllers\DashboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 // CEK KONEKSI
 
 Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('site.cek-koneksi');
@@ -64,7 +65,7 @@ Route::get('/admin/pemilik', [App\Http\Controllers\Admin\jenisHewanController::c
 
 
 
-// AKSES RESEPSIONIS
-Route::middleware('isResepionis')->group(function() {
-    Route::get('/resepsionis/dashboard', [App\Http\Controllers\Resepsionis\DashboardResepsionisController::class, 'index'])->name('resepsionis.dashboard');
-});
+// // AKSES RESEPSIONIS
+// Route::middleware('isResepionis')->group(function() {
+//     Route::get('/resepsionis/dashboard', [App\Http\Controllers\Resepsionis\DashboardResepsionisController::class, 'index'])->name('resepsionis.dashboard');
+// });
