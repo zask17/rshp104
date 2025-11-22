@@ -12,14 +12,8 @@ class Role extends Model
     
 
      public $timestamps = false;
-    
-    // Secara default Laravel mencari 'roles', kita paksa mencari 'role'
     protected $table = 'role'; 
-
-    // Primary Key yang Anda gunakan
     protected $primaryKey = 'idrole'; 
-
-    // Kolom yang dapat diisi
     protected $fillable = ['idrole', 'nama_role'];
     
     // Relasi many-to-many ke User melalui tabel pivot RoleUser

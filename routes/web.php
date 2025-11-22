@@ -42,13 +42,15 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/login', [SiteController::class, 'showLogin'])->name('login');
 Route::post('/login', [SiteController::class, 'login'])->name('login.process');
 
-// REGISTER
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
+// // REGISTER
+// Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+// Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
 
 
 // LOGOUT
 Route::post('/logout', [SiteController::class, 'logout'])->name('logout');
+
+
 
 // YANG BISA DIAKSES ADMIN
 
