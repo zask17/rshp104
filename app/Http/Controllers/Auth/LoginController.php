@@ -14,66 +14,80 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
-        // Asumsi: View untuk login Anda ada di resources/views/auth/login.blade.php
         return view('auth.login');
     }
 
-    /**
-     * Handle permintaan login (mereplikasi login_post.php)
-     */
     public function login(Request $request)
     {
-        // 1. Validasi input
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:6',
         ]);
 
-        // 2. Coba otentikasi user dasar (Verifikasi email dan password)
-        if (Auth::attempt($credentials, $request->remember)) {
-            $user = Auth::user();
-            
-            // 3. Periksa Role Aktif (Mereplikasi logika JOIN di login_post.php)
-            $activeRole = $user->activeRole();
-
-            if ($activeRole) {
-                // Login berhasil dan Role Aktif ditemukan.
-
-                // Di Laravel, kita tidak perlu menyimpan role ke $_SESSION secara manual 
-                // jika kita menggunakan logic di DashboardController yang sudah diperbaiki.
-                // Namun, kita bisa menyimpan nama role ke sesi untuk akses cepat.
-                $request->session()->put('active_role_name', $activeRole->nama_role);
-
-                $request->session()->regenerate();
-
-                // 4. Redirect ke Dashboard (admindashboard.php Anda)
-                return redirect()->intended(route('dashboard'));
-
-            } else {
-                // User terotentikasi, tapi tidak memiliki role aktif
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'Anda tidak memiliki role aktif.',
-                ])->onlyInput('email');
-            }
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        // 5. Otentikasi gagal (Email/Password salah)
-        return back()->withErrors([
-            'email' => 'Email atau Password salah.',
-        ])->onlyInput('email');
+        $user = User::with(['roleUser' => function ($query) {
+            $query->where('status', 1);
+        }, 'roleUser.role'])
+            ->where('email', $request->input('email'))
+            ->first();
+
+        if (!$user) {
+            return redirect()->back()
+                ->withErrors(['email' => 'Email tidak ditemukan.'])
+                ->withInput();
+        }
+
+        // Cek password
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()
+                ->withErrors(['password' => 'Password salah.'])
+                ->withInput();
+        }
+
+        $namaRole = Role::where('idrole', $user->roleUser[0]->idrole ?? null)->first();
+
+        // Login user ke session
+        Auth::login($user);
+
+        // Simpan session user
+        $request->session()->put([
+            'user_id'    => $user->iduser,
+            'user_name'  => $user->nama,
+            'user_email' => $user->email,
+            'user_role'  => $user->roleUser[0]->idrole ?? 'user',
+            'user_role_name' => $namaRole->nama_role ?? 'User',
+            'user_status' => $user->roleUser[0]->status ?? 'active'
+        ]);
+
+        // return redirect()->intended('/home')->with('success', 'Login berhasil!');
+
+        $userRole = $user->roleUser[0]->idrole ?? null;
+
+        switch ($userRole) {
+            case '1':
+            return redirect()->route()('admin.datamaster.datamaster')->with('Success', 'Login bergasil!');
+            case '2':
+            return redirect()->route()('dokter.dashboard')->with('Success', 'Login bergasil!');
+            case '3':
+            return redirect()->route()('perawat.dashboard')->with('Success', 'Login bergasil!');
+            case '4':
+            return redirect()->route()('resepsionis.dashboard')->with('Success', 'Login bergasil!');
+            default:
+            return redirect()->route()('pemilik.dashboard')->with('Success', 'Login bergasil!');
+        }
     }
 
-    /**
-     * Handle proses logout.
-     * (Anda bisa menggunakan fungsi ini atau yang ada di DashboardController)
-     */
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/')->with('succes', 'Logout bergasil!');
     }
 }

@@ -68,34 +68,34 @@ class User extends Authenticatable
     }
 
 
-    public function roles()
+    public function roleUser()
     {
-        return $this->belongsToMany(Role::class, 'role_user', 'iduser', 'idrole')
-                    ->withPivot('status'); // Ambil kolom 'status' dari tabel pivot
+        return $this->hasMany(RoleUser::class, 'iduser', 'iduser');
+                    // ->withPivot('status'); // Ambil kolom 'status' dari tabel pivot
     }
 
-    /**
-     * Mendapatkan Role aktif dari user saat ini.
-     * Ini mereplikasi logika 'status = 1' di login_post.php
-     *
-     * @return \App\Models\Role|null
-     */
-    public function activeRole()
-    {
-        return $this->roles()
-                    ->wherePivot('status', 1)
-                    ->first();
-    }
+//     /**
+//      * Mendapatkan Role aktif dari user saat ini.
+//      * Ini mereplikasi logika 'status = 1' di login_post.php
+//      *
+//      * @return \App\Models\Role|null
+//      */
+//     public function activeRole()
+//     {
+//         return $this->roles()
+//                     ->wherePivot('status', 1)
+//                     ->first();
+//     }
 
 
-    public function role()
-    {
-        return $this->hasOne(Role::class, 'iduser', 'iduser')
-                    ->where('status', 1);
-    }
+//     public function role()
+//     {
+//         return $this->hasOne(Role::class, 'iduser', 'iduser')
+//                     ->where('status', 1);
+//     }
 
-    public function isAdministrator()
-    {
-        return $this->role()->first()->role->nama_role === 'Administrator';
-    }
+//     public function isAdministrator()
+//     {
+//         return $this->role()->first()->role->nama_role === 'Administrator';
+//     }
 }
