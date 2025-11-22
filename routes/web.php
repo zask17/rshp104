@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,14 +55,49 @@ Route::post('/logout', [SiteController::class, 'logout'])->name('logout');
 
 // YANG BISA DIAKSES ADMIN
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Pengganti admindashboard.php
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Di sini tempat Anda dapat mendaftarkan rute web untuk aplikasi Anda.
+|
+*/
 
-    // Pengganti data_master.php
-    Route::get('/datamaster', [AdminController::class, 'dataMaster'])->name('datamaster');
+// --- RUTE OTENTIKASI DAN DASHBOARD ---
+// Rute untuk user yang sudah login (dilindungi oleh 'auth' middleware)
+Route::middleware(['auth'])->group(function () {
+    // Rute utama Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Rute sub-menu datamaster
-    Route::get('/datamaster/user', function () { return view('admin.datamaster.data_user'); })->name('datamaster.user');
-    // ... Tambahkan rute sub-menu lainnya di sini ...
+    // Rute Logout (menggunakan metode POST)
+    Route::post('/logout', [DashboardController::class, 'logout'])->name('logout');
+
+    // --- RUTE PERAN (Aksi Khusus) ---
+    // Rute untuk Resepsionis
+    // Ganti 'ResepsionisController' dengan controller yang sesuai
+    Route::get('/resepsionis/pasien', function () {
+        return view('resepsionis.pasien'); // Ganti dengan logika controller Anda
+    })->name('resepsionis.pasien');
+    
+    Route::get('/resepsionis/temu-dokter', function () {
+        return view('resepsionis.temu-dokter'); // Ganti dengan logika controller Anda
+    })->name('resepsionis.temu.dokter');
+
+    // Rute untuk Administrator
+    // Ganti 'AdminController' dengan controller yang sesuai
+    Route::get('/admin/datamaster', function () {
+        return view('admin.datamaster'); // Ganti dengan logika controller Anda
+    })->name('admin.datamaster');
 });
+
+// --- RUTE BERANDA/LANDING PAGE ---
+// Rute Home/Landing Page
+Route::get('/', function () {
+    return view('welcome'); // Ganti dengan view home Anda yang sebenarnya
+});
+
+// Tambahkan rute login di sini jika Anda tidak menggunakan Breeze/Jetstream
+// Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+
+// ... Rute lain di bawah ini ...
