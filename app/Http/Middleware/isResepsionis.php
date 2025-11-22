@@ -16,21 +16,17 @@ class isResepsionis
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
-
-                // Jika user tidak autensikassi, redirect ke login
-        if (!Auth::check()){
+        if (!Auth::check()) { // Perbaikan: Gunakan !Auth::check()
             return redirect()->route('login');
         }
 
-        // Ambil role dari session atau relasi user
         $userRole = session('user_role');
 
-        // Kalau role 4, return ??
-        if ($userRole === 4) {
+        // Cek jika role user adalah '3' (Perawat)
+        if ($userRole == '4') {
             return $next($request);
         } else {
-            return back()->with('eror', 'Akses ditolak, Anda tidak punya izin mengakses halaman ini.');
+            return back()->with('error', 'Akses ditolak. Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
     }
 }

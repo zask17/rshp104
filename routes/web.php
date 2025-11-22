@@ -1,9 +1,10 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Site\SiteController;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,15 +17,15 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-
 // CEK KONEKSI
 
 Route::get('/cek-koneksi', [SiteController::class, 'cekKoneksi'])->name('site.cek-koneksi');
 
 
+
 // --- RUTE HALAMAN AWAL ---
 
-Route::get('/', [SiteController::class, 'home']);
+Route::get('/', [SiteController::class, 'home'])->name('home');
 
 Route::get('/visi-misi', [SiteController::class, 'visiMisi'])->name('visi-misi');
 
@@ -48,8 +49,24 @@ Route::post('/login', [SiteController::class, 'login'])->name('login.process');
 // LOGOUT
 Route::post('/logout', [SiteController::class, 'logout'])->name('logout');
 
+
+
 // --- RUTE HALAMAN AUTH ---
 
-// Auth::routes();
+Auth::routes();
 
+
+// AKSES ADMIN
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::middleware('isAdministrator')->group(function () {
+    Route::get('/admin/dashboard', [App\Http\Controllers\Admin\DashboardAdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/jenis-hewan', [App\Http\Controllers\Admin\JenisHewanController::class, 'index'])->name('admin.jenis-hewan.index');
+    Route::get('/admin/pemilik', [App\Http\Controllers\Admin\PemilikController::class, 'index'])->name('admin.pemilik.index');
+});
+
+
+// AKSES RESEPSIONIS
+Route::middleware('isResepionis')->group(function() {
+    Route::get('/resepsionis/dashboard', [App\Http\Controllers\Resepsionis\DashboardResepsionisController::class, 'index'])->name('resepsionis.dashboard');
+});
