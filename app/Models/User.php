@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function role()
     {
-        return $this->hasOne(RoleUser::class, 'iduser', 'iduser')
+        return $this->hasOne(Role::class, 'iduser', 'iduser')
                     ->where('status', 1);
     }
 

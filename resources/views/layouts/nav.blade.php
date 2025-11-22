@@ -35,14 +35,14 @@
             </a>
         </li>
 
-        <li>
-            <a href="{{ route('login') }}" class="@if(request()->is('login')) active @endif">
-                Login <span class="underline"></span>
-            </a>
-            {{-- class="dropdown-item-kustom">{{ __('Login') }}</a> --}}
-        </li>
-
         @guest
+
+            <li>
+                <a href="{{ route('login') }}" class="@if(request()->is('login')) active @endif">
+                    Login <span class="underline"></span>
+                </a>
+                {{-- class="dropdown-item-kustom">{{ __('Login') }}</a> --}}
+            </li>
             {{-- Login/Register jadi Dropdown
             <li class="dropdown-kustom">
                 <a href="#" onclick="return false;" class="dropdown-toggle-kustom">
@@ -52,10 +52,10 @@
                 {{-- Konten Dropdown (Perlu CSS Tambahan) --}}
                 {{-- <div class="dropdown-menu-kustom">
                     @if (Route::has('login'))
-                        <a href="{{ route('login') }}" class="dropdown-item-kustom">{{ __('Login') }}</a>
+                    <a href="{{ route('login') }}" class="dropdown-item-kustom">{{ __('Login') }}</a>
                     @endif
                     @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="dropdown-item-kustom">{{ __('Register') }}</a>
+                    <a href="{{ route('register') }}" class="dropdown-item-kustom">{{ __('Register') }}</a>
                     @endif
                 </div>
             </li> --}}
@@ -69,12 +69,12 @@
                 </a>
 
                 <div class="dropdown-menu-kustom" aria-labelledby="navbarDropdown">
-                    
+
                     <a class="dropdown-item-kustom" href="{{ route('home') }}">Dashboard</a>
 
                     {{-- Logout --}}
                     <a class="dropdown-item-kustom" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                     document.getElementById('logout-form').submit();">
+                                         document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
                     </a>
 

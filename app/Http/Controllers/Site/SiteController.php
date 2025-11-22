@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class SiteController extends Controller
 {
@@ -48,6 +49,25 @@ class SiteController extends Controller
         return view('auth.login');
     }
 
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('/');
+        }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
+    }
+
+
+
     // public function login(Request $request)
     // {
     //     $credentials = $request->validate([
@@ -57,47 +77,41 @@ class SiteController extends Controller
 
     //     if (Auth::attempt($credentials)) {
     //         $request->session()->regenerate();
-    //         return redirect()->intended('/');
+    //         $user = Auth::user();
+
+    //         // Mendapatkan objek Role aktif (menggunakan helper dari Model User)
+    //         $activeRole = $user->getActiveRole();
+
+    //         // 1. Cek apakah user memiliki role aktif
+    //         if (!$activeRole) {
+    //             Auth::logout();
+    //             $request->session()->invalidate();
+    //             return back()->withErrors(['email' => 'Anda tidak memiliki role aktif.']);
+    //         }
+            
+    //         // 2. Redirect berdasarkan Role ID
+    //         switch ($activeRole->idrole) {
+    //             case 1: // Administrator
+    //                 return redirect()->intended(route('admin.dashboard'));
+    //             case 2: // Dokter
+    //                 return redirect()->intended(route('dokter.dashboard')); 
+    //             case 3: // Perawat
+    //                 return redirect()->intended(route('perawat.dashboard'));
+    //             case 4: // Resepsionis
+    //                 return redirect()->intended(route('resepsionis.dashboard'));
+    //             default:
+    //                 // Jika ID role aktif tidak terdaftar di daftar switch
+    //                 Auth::logout();
+    //                 $request->session()->invalidate();
+    //                 return back()->withErrors(['email' => 'Role aktif Anda tidak terdaftar dalam sistem redirect.']);
+    //         }
     //     }
 
+    //     // Jika Auth::attempt gagal (email/password salah)
     //     return back()->withErrors([
     //         'email' => 'Email atau password salah.',
     //     ]);
     // }
-
-
-
-    // app/Http/Controllers/Site/SiteController.php (Fungsi login)
-
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            // Pengecekan Role
-            if ($user->role && $user->role->role->idrole == 1) {
-                $request->session()->regenerate();
-                return redirect()->intended(route('admin.dashboard'));
-            }
-
-            // Jika bukan Administrator atau tidak memiliki role aktif
-            if (!$user->role || $user->role->role->idrole > 5) {
-                // Logout pengguna karena tidak memenuhi kriteria akses
-                Auth::logout();
-                $request->session()->invalidate();
-                return back()->withErrors(['email' => 'Anda tidak memiliki role yang diizinkan untuk mengakses sistem.']);
-            }
-        }
-
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ]);
-    }
 
 
     public function logout(Request $request)
