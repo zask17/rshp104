@@ -170,10 +170,10 @@ Route::middleware('isAdministrator')->group(function () {
     ])->names('admin.pets');;
 });
 
-// //akses Dokter
-// Route::middleware(['isDokter'])->group(function () {
-//     Route::get('/dokter/dashboard', [DashboardDokterController::class, 'index'])->name('dokter.dashboard');
-// });
+//akses Dokter
+Route::middleware(['isDokter'])->group(function () {
+    Route::get('/dokter/dashboard', [DashboardDokterController::class, 'index'])->name('dokter.dashboard');
+});
 
 //akses Perawat
 Route::middleware(['isPerawat'])->group(function () {
