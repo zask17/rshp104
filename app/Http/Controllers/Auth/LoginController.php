@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 
 
 class LoginController extends Controller
@@ -52,7 +53,7 @@ class LoginController extends Controller
 
         protected function loggedOut(Request $request)
     {
-        return redirect()->route('home');
+        return redirect('/')->with('success', 'Logout berhasil!');
     }
 
     public function login(Request $request)
@@ -132,9 +133,12 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
-        $this->guard()->logout();
+
+        Auth::logout();
+        
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return $this->loggedOut($request) ?: redirect('/');
+        
+        return response()->redirect('/')->with('Success', 'Logout berhasil!');
     }
 }
