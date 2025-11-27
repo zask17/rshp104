@@ -36,74 +36,63 @@
         </li>
 
         @guest
+            {{-- Tampilkan Login jika belum login --}}
             <li>
                 <a href="{{ route('login') }}" class="@if(request()->is('login')) active @endif">
                     Login <span class="underline"></span>
                 </a>
             </li>
-            {{-- class="dropdown-item-kustom">{{ __('Login') }}</a> --}}
-
-
-            {{-- Login/Register jadi Dropdown
-            <li class="dropdown-kustom">
-                <a href="#" onclick="return false;" class="dropdown-toggle-kustom">
-                    Masuk <span class="underline"></span>
-                </a>
-
-                {{-- Konten Dropdown (Perlu CSS Tambahan) --}}
-                {{-- <div class="dropdown-menu-kustom">
-                    @if (Route::has('login'))
-                    <a href="{{ route('login') }}" class="dropdown-item-kustom">{{ __('Login') }}</a>
-                    @endif
-                    @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="dropdown-item-kustom">{{ __('Register') }}</a>
-                    @endif
-                </div>
-            </li> --}}
-
-
         @else
-            {{-- Sudah Login --}}
-            <li class="dropdown-kustom">
-                <a id="navbarDropdown" href="#" onclick="return false;" class="dropdown-toggle-kustom">
-                    {{ ucwords(Auth::user()->nama) }} <span class="underline"></span>
+            {{-- Jika sudah Login, tampilkan Dashboard dan Logout sebagai menu horizontal --}}
+            
+            {{-- 1. Tombol Dashboard Berdasarkan Role --}}
+            @php
+                // Tentukan rute dan nama dashboard berdasarkan role
+                $dashboardRoute = '';
+                $dashboardName = '';
+
+                switch (Auth::user()->role) {
+                    case 'admin':
+                        $dashboardRoute = route('admin.dashboard');
+                        $dashboardName = 'Dashboard Admin';
+                        break;
+                    case 'dokter':
+                        $dashboardRoute = route('dokter.dashboard');
+                        $dashboardName = 'Dashboard Dokter';
+                        break;
+                    case 'perawat':
+                        $dashboardRoute = route('perawat.dashboard');
+                        $dashboardName = 'Dashboard Perawat';
+                        break;
+                    case 'resepsionis':
+                        $dashboardRoute = route('resepsionis.dashboard');
+                        $dashboardName = 'Dashboard Resepsionis';
+                        break;
+                    default:
+                        $dashboardRoute = route('home'); // Rute default jika role tidak terdefinisi
+                        $dashboardName = 'Dashboard';
+                        break;
+                }
+            @endphp
+            
+            <li>
+                <a href="{{ $dashboardRoute }}" class="@if(request()->is('*dashboard*')) active @endif">
+                    {{ $dashboardName }} <span class="underline"></span>
                 </a>
-
-                <div class="dropdown-menu-kustom" aria-labelledby="navbarDropdown">
-
-                    {{-- Dashboard Berdasarkan Role --}}
-                    @if(Auth::user()->role === 'admin')
-                        <a class="dropdown-item-kustom" href="{{ route('admin.dashboard') }}">
-                            Dashboard Admin
-                        </a>
-
-                    {{-- @elseif(Auth::user()->role === 'dokter')
-                        <a class="dropdown-item-kustom" href="{{ route('dokter.dashboard') }}">
-                            Dashboard Dokter
-                        </a> --}}
-
-                    @elseif(Auth::user()->role === 'perawat')
-                        <a class="dropdown-item-kustom" href="{{ route('perawat.dashboard') }}">
-                            Dashboard Perawat
-                        </a>
-
-                    @elseif(Auth::user()->role === 'resepsionis')
-                        <a class="dropdown-item-kustom" href="{{ route('resepsionis.dashboard') }}">
-                            Dashboard Resepsionis
-                        </a>
-                    @endif
-
-                    {{-- Logout --}}
-                    <a class="dropdown-item-kustom" href="{{ route('logout') }}" onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">
-                        Logout
-                    </a>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </div>
             </li>
+
+            {{-- 2. Tombol Logout --}}
+            <li>
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout <span class="underline"></span>
+                </a>
+            </li>
+            
+            {{-- Form Logout harus tetap ada --}}
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
+
         @endguest
     </ul>
 </nav>
