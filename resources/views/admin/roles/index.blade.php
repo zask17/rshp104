@@ -29,7 +29,6 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Nama User</th>
                         <th>Role</th>
                         <th>Aksi</th>
                     </tr>
@@ -38,17 +37,6 @@
                     @forelse ($roles as $item)
                         <tr>
                             <td>{{ $item->idrole }}</td>
-                            <td>
-                                @if ($item->users->count() > 0)
-                                    {{-- Loop untuk menampilkan nama setiap pengguna --}}
-                                    @foreach ($item->users as $user)
-                                        {{ $user->nama }}
-                                        <br> {{-- Tambahkan baris baru untuk setiap user --}}
-                                    @endforeach
-                                @else
-                                    Tidak ada pengguna
-                                @endif
-                            </td>
                             <td>{{ $item->nama_role }}</td>
                             <td class="action-buttons">
                                 {{-- Button Edit --}}

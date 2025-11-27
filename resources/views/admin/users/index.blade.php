@@ -45,14 +45,14 @@
                     <td>{{ $user->nama }}</td> 
                     <td>{{ $user->email }}</td>
                     {{-- <td>{{ $user->RoleUser->nama_role ?? 'N/A' }}</td> --}}
+
                     <td class="action-buttons">
                         
-                        {{-- Diperbaiki: Menggunakan $user->iduser sebagai parameter rute --}}
+                        {{-- Menggunakan $user->iduser sebagai parameter rute --}}
                         <a href="{{ route('admin.users.edit', $user->iduser) }}" class="edit-btn">
                             <i class="fas fa-edit"></i> Edit
                         </a>
 
-                        {{-- Diperbaiki: Menggunakan $user->iduser sebagai parameter rute --}}
                         <form action="{{ route('admin.users.destroy', $user->iduser) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
@@ -60,7 +60,7 @@
                             <button 
                                 type="submit" 
                                 class="delete-btn" 
-                                onclick="return confirm('Apakah Anda yakin ingin menghapus user {{ $user->name }}? Tindakan ini tidak dapat dibatalkan.')" 
+                                onclick="return confirm('Apakah Anda yakin ingin menghapus user {{ $user->nama}}? Tindakan ini tidak dapat dibatalkan.')" 
                                 {{ auth()->id() == $user->iduser ? 'disabled' : '' }}
                             >
                                 <i class="fas fa-trash"></i> Hapus
