@@ -8,11 +8,11 @@
             <div class="welcome-section">
                 <h1>Selamat Datang, {{ session('user_name', 'Admin') }}!</h1>
                 <p>Anda login sebagai <strong>{{ session('user_role_name', 'Administrator') }}</strong>. Silakan kelola data
-                    master melalui menu di bawah ini.</p>
-                <a href="{{ route('logout') }}" class="btn-dashboard btn-logout"
+                    pasien melalui menu di bawah ini.</p>
+                {{-- <a href="{{ route('logout') }}" class="btn-dashboard btn-logout"
                     onclick="event.preventDefault(); document.getElementById('logout-form-dashboard').submit();">
                     Logout
-                </a>
+                </a> --}}
             </div>
 
             @if (session('success'))
@@ -22,12 +22,12 @@
             @endif
 
             <div class="dashboard-grid">
-                <a href="{{ route('admin.jenis-hewan.index') }}" class="dashboard-card">
-                    <h3><i class="fas fa-paw"></i> Jenis Hewan</h3>
-                    <p>Kelola kategori utama hewan.</p>
+                <a href="{{ route('resepsionis.pendaftaran.index') }}" class="dashboard-card">
+                    <h3><i class="fas fa-paw"></i> Daftar Pasien</h3>
+                    <p>Lihat pasien yang sudah terdaftar atau mulai registrasi pasien baru.</p>
                 </a>
-                <a href="{{ route('admin.ras-hewan.index') }}" class="dashboard-card">
-                    <h3><i class="fas fa-dog"></i> Ras Hewan</h3>
+                <a href="{{ route('resepsionis.temu-dokter.index') }}" class="dashboard-card">
+                    <h3><i class="fas fa-dog"></i> Temu</h3>
                     <p>Kelola berbagai ras dari setiap jenis hewan.</p>
                 </a>
                 <a href="{{ route('admin.kategori-hewan.index') }}" class="dashboard-card">

@@ -70,7 +70,7 @@
                     <p>Kelola berbagai ras dari setiap jenis hewan.</p>
                 </a>
                 <a href="{{ route('admin.kategori-hewan.index') }}" class="dashboard-card">
-                    <h3><i class="fas fa-tags"></i> Kategori Hewan</h3>
+                    <h3><i class="fas fa-tags"></i> Kategori</h3>
                     <p>Kelola kategori umum untuk hewan.</p>
                 </a>
 

@@ -18,7 +18,7 @@
                     @endif
 
                     {{-- Form untuk Submit Data --}}
-                    <form action="{{ route('admin.kategori-klinis.update', $jenisHewan->idjenis_hewan) }}" method="POST">
+                    <form action="{{ route('admin.kategori-klinis.update', $JenisHewan->idjenis_hewan) }}" method="POST">
                         @csrf
                         @method('PUT')
 

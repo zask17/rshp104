@@ -22,6 +22,7 @@
 <body>
     <div id="app">
         @include('layouts.nav')
+        @include('layouts.partials.sidebar')
 
 
         <main class="py-4">
