@@ -7,7 +7,7 @@
     <div class="form-container">
         <h1>Tambah Kategori Hewan</h1>
         
-        <a href="{{ route('admin.kategori-hewan.index') }}" class="back-link">
+        <a href="{{ route('admin.kategori.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Kembali ke Daftar Kategori
         </a>
 
@@ -17,7 +17,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.kategori-hewan.store') }}" method="POST">
+        <form action="{{ route('admin.kategori.store') }}" method="POST">
             @csrf
 
             <div class="form-group">

@@ -21,7 +21,7 @@
         @endif
 
         {{-- Button Tambah --}}
-        <a href="{{ route('admin.kategori-hewan.create') }}" class="add-btn">
+        <a href="{{ route('admin.kategori.create') }}" class="add-btn">
             <i class="fas fa-plus"></i> Tambah Kategori
         </a>
 
@@ -40,12 +40,12 @@
                     <td>{{ $item->nama_kategori }}</td>
                     <td class="action-buttons">
                         {{-- Button Edit --}}
-                        <a href="{{ route('admin.kategori-hewan.edit', $item->idkategori) }}" class="edit-btn">
+                        <a href="{{ route('admin.kategori.edit', $item->idkategori) }}" class="edit-btn">
                             <i class="fas fa-edit"></i> Edit
                         </a>
 
                         {{-- Form Delete --}}
-                        <form action="{{ route('admin.kategori-hewan.destroy', $item->idkategori) }}" method="POST" style="display:inline-block;">
+                        <form action="{{ route('admin.kategori.destroy', $item->idkategori) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori {{ $item->nama_kategori }}? Tindakan ini tidak dapat dibatalkan jika masih ada relasi data.')">

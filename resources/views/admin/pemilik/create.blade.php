@@ -30,18 +30,18 @@
                 @enderror
             </div>
 
-            {{-- Nomor HP --}}
+            {{-- Nomor WhatsApp --}}
             <div class="form-group">
-                <label for="no_hp">Nomor HP <span class="text-danger">*</span></label>
+                <label for="no_wa">Nomor WhatsApp <span class="text-danger">*</span></label>
                 <input
                     type="text"
-                    id="no_hp"
-                    name="no_hp"
-                    value="{{ old('no_hp') }}"
-                    placeholder="Masukkan nomor telepon aktif"
+                    id="no_wa"
+                    name="no_wa"
+                    value="{{ old('no_wa') }}"
+                    placeholder="Masukkan nomor WhatsApp aktif"
                     required
                 >
-                @error('no_hp')
+                @error('no_wa')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>

@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pemilik;
+use App\Models\User;
+use App\Models\RoleUser;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class PemilikController extends Controller
 {
@@ -24,10 +27,36 @@ class PemilikController extends Controller
     {
         $validatedData = $this->validatePemilik($request);
 
-        Pemilik::create($validatedData);
+        try {
+            // 1. Buat user baru untuk pemilik terlebih dahulu
+            $user = User::create([
+                'nama' => $validatedData['nama_pemilik'],
+                'email' => $validatedData['email'] ?? null,
+                'password' => bcrypt('password123'), // Password default
+            ]);
 
-        return redirect()->route('admin.pemilik.index')
-                         ->with('success', 'Data pemilik berhasil ditambahkan.');
+            // 2. Buat data pemilik dengan iduser dari user yang baru dibuat
+            $pemilik = Pemilik::create([
+                'nama_pemilik' => $validatedData['nama_pemilik'],
+                'alamat' => $validatedData['alamat'],
+                'no_wa' => $validatedData['no_wa'],
+                'email' => $validatedData['email'] ?? null,
+                'iduser' => $user->iduser,
+            ]);
+
+            // 3. Assign role 'Pemilik' (idrole = 4, pastikan ada di database)
+            RoleUser::create([
+                'iduser' => $user->iduser,
+                'idrole' => 4, // Asumsikan role pemilik memiliki idrole = 4
+                'status' => 1, // 1 = active, 0 = inactive
+            ]);
+
+            return redirect()->route('admin.pemilik.index')
+                             ->with('success', 'Data pemilik berhasil ditambahkan. User account telah dibuat dengan password default: password123');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.pemilik.index')
+                             ->with('error', 'Gagal menambahkan data pemilik: ' . $e->getMessage());
+        }
     }
 
     public function edit(Pemilik $pemilik)
@@ -40,10 +69,27 @@ class PemilikController extends Controller
         // Menggunakan ID model untuk mengabaikan unique check pada dirinya sendiri
         $validatedData = $this->validatePemilik($request, $pemilik->idpemilik);
 
-        $pemilik->update($validatedData);
+        try {
+            // Update data pemilik
+            $pemilik->update($validatedData);
 
-        return redirect()->route('admin.pemilik.index')
-                         ->with('success', 'Data pemilik berhasil diperbarui.');
+            // Update data user jika ada
+            if ($pemilik->iduser) {
+                $user = User::find($pemilik->iduser);
+                if ($user) {
+                    $user->update([
+                        'nama' => $validatedData['nama_pemilik'],
+                        'email' => $validatedData['email'] ?? null,
+                    ]);
+                }
+            }
+
+            return redirect()->route('admin.pemilik.index')
+                             ->with('success', 'Data pemilik berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.pemilik.index')
+                             ->with('error', 'Gagal memperbarui data pemilik: ' . $e->getMessage());
+        }
     }
 
     public function destroy(Pemilik $pemilik)
@@ -54,9 +100,19 @@ class PemilikController extends Controller
                              ->with('error', 'Gagal menghapus pemilik karena masih memiliki data hewan peliharaan yang terdaftar.');
         }
         try {
+            $userId = $pemilik->iduser;
+            
+            // Hapus data pemilik
             $pemilik->delete();
+
+            // Hapus user dan role_user jika ada
+            if ($userId) {
+                RoleUser::where('iduser', $userId)->delete();
+                User::destroy($userId);
+            }
+
             return redirect()->route('admin.pemilik.index')
-                             ->with('success', 'Data pemilik berhasil dihapus.');
+                             ->with('success', 'Data pemilik dan user account berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->route('admin.pemilik.index')
                              ->with('error', 'Gagal menghapus pemilik. Terjadi kesalahan sistem.');
@@ -68,11 +124,11 @@ class PemilikController extends Controller
         return $request->validate([
             'nama_pemilik' => 'required|string|max:255|min:3',
             'alamat' => 'required|string|max:500',
-            'no_hp' => [
+            'no_wa' => [
                 'required',
                 'string',
                 'max:15',
-                Rule::unique('pemilik', 'no_hp')->ignore($id, 'idpemilik'),
+                Rule::unique('pemilik', 'no_wa')->ignore($id, 'idpemilik'),
             ],
             'email' => [
                 'nullable',
@@ -80,13 +136,15 @@ class PemilikController extends Controller
                 'max:255',
                 Rule::unique('pemilik', 'email')->ignore($id, 'idpemilik'),
             ],
+            'iduser' => 'nullable|integer|exists:users,iduser',
         ], [
             'nama_pemilik.required' => 'Nama pemilik tidak boleh kosong.',
             'alamat.required' => 'Alamat tidak boleh kosong.',
-            'no_hp.required' => 'Nomor HP tidak boleh kosong.',
-            'no_hp.unique' => 'Nomor HP sudah terdaftar.',
+            'no_wa.required' => 'Nomor HP tidak boleh kosong.',
+            'no_wa.unique' => 'Nomor HP sudah terdaftar.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email sudah terdaftar.',
         ]);
     }
 }
+

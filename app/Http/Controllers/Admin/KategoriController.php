@@ -49,7 +49,7 @@ class KategoriController extends Controller
         
         $kategori->save(); 
         
-        return redirect()->route('admin.kategori-hewan.index')
+        return redirect()->route('admin.kategori.index')
                          ->with('success', 'Kategori hewan berhasil diperbarui.');
     }
 
@@ -57,20 +57,20 @@ class KategoriController extends Controller
     {
         // NOTE: Pengecekan relasi dengan model 'Hewan' (yang diasumsikan)
         // if ($kategori->hewan()->count() > 0) {
-        //     return redirect()->route('admin.kategori-hewan.index')
+        //     return redirect()->route('admin.kategori.index')
         //                      ->with('error', 'Gagal menghapus kategori karena masih terkait dengan data hewan.');
         // }
 
         try {
             // FIX: Menggunakan Eloquent Model delete()
             $kategori->delete();
-            return redirect()->route('admin.kategori-hewan.index')
+            return redirect()->route('admin.kategori.index')
                              ->with('success', 'Kategori hewan berhasil dihapus.');
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Gagal menghapus kategori: ' . $e->getMessage()); 
 
-            return redirect()->route('admin.kategori-hewan.index')
+            return redirect()->route('admin.kategori.index')
                              ->with('error', 'Gagal menghapus kategori. Pastikan tidak ada data yang terkait.');
         }
     }
@@ -88,7 +88,7 @@ class KategoriController extends Controller
             // created_at dan updated_at akan terisi otomatis jika timestamps aktif
         ]);
 
-        return redirect()->route('admin.kategori-hewan.index')
+        return redirect()->route('admin.kategori.index')
                          ->with('success', 'Kategori hewan berhasil ditambahkan.');
     }
 

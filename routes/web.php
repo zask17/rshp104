@@ -89,17 +89,17 @@ Route::middleware('isAdministrator')->group(function () {
         ])->names('admin.ras-hewan');
         
     // KATEGORI HEWAN
-    Route::get('/kategori-hewan', [KategoriController::class, 'index'])->name('admin.kategori-hewan.index');
-    Route::get('/kategori-hewan/create', [KategoriController::class, 'create'])->name('admin.kategori-hewan.create');
-    Route::post('/kategori-hewan', [KategoriController::class, 'store'])->name('admin.kategori-hewan.store');
-    Route::get('/kategori-hewan/{kategoriHewan}/edit', [KategoriController::class, 'edit'])->name('admin.kategori-hewan.edit');
-    Route::put('/kategori-hewan/{kategoriHewan}', [KategoriController::class, 'update'])->name('admin.kategori-hewan.update');
-    Route::delete('/kategori-hewan/{kategoriHewan}', [KategoriController::class, 'destroy'])->name('admin.kategori-hewan.destroy');
-    Route::resource('kategori-hewan', KategoriController::class)
+    Route::get('/kategori', [KategoriController::class, 'index'])->name('admin.kategori.index');
+    Route::get('/kategori/create', [KategoriController::class, 'create'])->name('admin.kategori.create');
+    Route::post('/kategori', [KategoriController::class, 'store'])->name('admin.kategori.store');
+    Route::get('/kategori/{kategoriHewan}/edit', [KategoriController::class, 'edit'])->name('admin.kategori.edit');
+    Route::put('/kategori/{kategoriHewan}', [KategoriController::class, 'update'])->name('admin.kategori.update');
+    Route::delete('/kategori/{kategoriHewan}', [KategoriController::class, 'destroy'])->name('admin.kategori.destroy');
+    Route::resource('kategori', KategoriController::class)
         ->except(['show'])
         ->parameters([
-            'kategori-hewan' => 'kategoriHewan'
-    ])->names('admin.kategori-hewan');;
+            'kategori' => 'kategori'
+    ])->names('admin.kategori');;
 
     // KATEGORI KLINIS
     Route::get('/kategori-klinis', [KategoriKlinisController::class, 'index'])->name('admin.kategori_klinis.index');

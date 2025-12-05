@@ -30,7 +30,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Nama Pemilik</th>
-                    <th>Nomor HP</th>
+                    <th>Nomor WhatsApp</th>
                     <th>Email</th>
                     <th>Alamat</th>
                     <th>Aksi</th>
@@ -41,7 +41,7 @@
                 <tr>
                     <td>{{ $item->idpemilik }}</td>
                     <td>{{ $item->nama_pemilik }}</td>
-                    <td>{{ $item->no_hp }}</td>
+                    <td>{{ $item->no_wa }}</td>
                     <td>{{ $item->email ?? '-' }}</td>
                     <td>{{ Str::limit($item->alamat, 50) }}</td>
                     <td class="action-buttons">
