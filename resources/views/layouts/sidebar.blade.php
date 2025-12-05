@@ -17,7 +17,7 @@
             // Untuk mengaktifkan menu Data Master jika salah satu submenu-nya aktif
             $dataMasterRoutes = [
                 'admin.datamaster', 'admin.jenis-hewan.*', 'admin.ras-hewan.*', 
-                'admin.kategori-hewan.*', 'admin.kategori-klinis.*', 'admin.kode-tindakan-terapi.*'
+                'admin.kategori.*', 'admin.kategori-klinis.*', 'admin.kode-tindakan-terapi.*'
             ];
             $isDataMasterActive = collect($dataMasterRoutes)->some(fn($route) => request()->routeIs($route));
         @endphp
