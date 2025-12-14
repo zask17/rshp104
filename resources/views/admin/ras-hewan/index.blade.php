@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="page-container">
-    {{-- Memastikan judul di luar page-header agar menyerupai tampilan foto --}}
-    <div class="page-header-title-only">
+    <div class="page-header">
         <h1>Manajemen Ras Hewan</h1>
     </div>
 
     <div class="main-content">
+        {{-- Menampilkan Flash Message (Success/Error) --}}
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
@@ -20,9 +20,7 @@
             </div>
         @endif
         
-        {{-- Menghilangkan tombol Tambah Ras Hewan karena di foto input ada di dalam tabel --}}
-
-        {{-- Menggunakan tabel baru untuk layout pengelompokan --}}
+        {{-- Tabel pengelompokan --}}
         <table class="ras-hewan-grouped-table">
             <thead>
                 {{-- Header biru sesuai foto --}}
