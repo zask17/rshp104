@@ -10,8 +10,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\PetController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\Dokter\DashboardDokterController;
+
 use App\Http\Controllers\Perawat\DashboardPerawatController;
+
+// --- Controller Dokter yang digunakan ---
+use App\Http\Controllers\Dokter\DashboardDokterController;
+use App\Http\Controllers\Dokter\RekamMedisController;
+use App\Http\Controllers\Dokter\DetailRekamMedisController;
+use App\Http\Controllers\Dokter\ProfileController;
+use App\Http\Controllers\Dokter\PetController as DokterPetController;
 
 // --- Controller Resepsionis yang digunakan ---
 use App\Http\Controllers\Resepsionis\DashboardResepsionisController;
@@ -180,9 +187,29 @@ Route::middleware('isAdministrator')->group(function () {
         ])->names('admin.pets');;
 });
 
+
 //akses Dokter
 Route::middleware(['isDokter'])->group(function () {
     Route::get('/dokter/dashboard', [DashboardDokterController::class, 'index'])->name('dokter.dashboard');
+
+    // 1. DATA PASIEN (Pet)
+    // Ganti PetController::class menjadi DokterPetController::class
+    Route::get('/dokter/pasien', [DokterPetController::class, 'index'])->name('dokter.pasien.index');
+    Route::get('/dokter/pasien/{pet}/show', [DokterPetController::class, 'show'])->name('dokter.pasien.show');
+
+    // 2. REKAM MEDIS & JANJI TEMU
+    Route::get('/dokter/rekam-medis', [RekamMedisController::class, 'index'])->name('dokter.rekam-medis.index');
+    Route::get('/dokter/rekam-medis/create/{temuDokter}', [RekamMedisController::class, 'create'])->name('dokter.rekam-medis.create');
+    Route::post('/dokter/rekam-medis/store', [RekamMedisController::class, 'store'])->name('dokter.rekam-medis.store');
+    Route::get('/dokter/rekam-medis/{rekamMedis}/show', [RekamMedisController::class, 'show'])->name('dokter.rekam-medis.show');
+
+    // 3. CRUD DETAIL REKAM MEDIS
+    Route::post('/dokter/detail-rekam-medis/store/{rekamMedis}', [DetailRekamMedisController::class, 'store'])->name('dokter.detail-rekam-medis.store');
+    Route::put('/dokter/detail-rekam-medis/{detailRekamMedis}', [DetailRekamMedisController::class, 'update'])->name('dokter.detail-rekam-medis.update');
+    Route::delete('/dokter/detail-rekam-medis/{detailRekamMedis}', [DetailRekamMedisController::class, 'destroy'])->name('dokter.detail-rekam-medis.destroy');
+
+    // 4. PROFIL DOKTER
+    Route::get('/dokter/profile', [ProfileController::class, 'index'])->name('dokter.profile.index');
 });
 
 //akses Perawat
