@@ -19,9 +19,51 @@ class Pet extends Model
         'idjenis_hewan',
         'idras_hewan',
         'tanggal_lahir',
-        'jenis_kelamin',
+        'jenis_kelamin', // Kolom database
         'warna_tanda',
     ];
+
+    // ===============================================
+    // MUTATOR (Mengubah data sebelum disimpan ke DB)
+    // ===============================================
+
+    /**
+     * Set the jenis_kelamin attribute.
+     * Mengkonversi 'Jantan'/'Betina' menjadi '1'/'2' sebelum disimpan.
+     */
+    public function setJenisKelaminAttribute($value)
+    {
+        if ($value === 'Jantan') {
+            $this->attributes['jenis_kelamin'] = '1';
+        } elseif ($value === 'Betina') {
+            $this->attributes['jenis_kelamin'] = '2';
+        } else {
+            // Jika dikirim nilai lain (misal 1 atau 2), simpan saja
+            $this->attributes['jenis_kelamin'] = $value;
+        }
+    }
+
+    // ===============================================
+    // ACCESSOR (Mengubah data saat diambil dari DB)
+    // ===============================================
+
+    /**
+     * Get the jenis_kelamin attribute.
+     * Mengkonversi '1'/'2' menjadi 'Jantan'/'Betina' saat ditampilkan.
+     */
+    public function getJenisKelaminAttribute($value)
+    {
+        if ($value === '1') {
+            return 'Jantan';
+        } elseif ($value === '2') {
+            return 'Betina';
+        }
+        return $value; // Kembalikan nilai asli jika null atau tidak terdefinisi
+    }
+
+    // ===============================================
+    // RELATIONS
+    // ===============================================
 
     public function pemilik()
     {

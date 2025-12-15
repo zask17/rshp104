@@ -22,16 +22,17 @@
 
             {{-- Nama Pet --}}
             <div class="form-group">
-                <label for="nama_pet">Nama Pasien <span class="text-danger">*</span></label>
+                {{-- FIX: Ubah nama_pet ke nama --}}
+                <label for="nama">Nama Pasien <span class="text-danger">*</span></label>
                 <input
                     type="text"
-                    id="nama_pet"
-                    name="nama_pet"
-                    value="{{ old('nama_pet') }}"
+                    id="nama"
+                    name="nama"
+                    value="{{ old('nama') }}"
                     placeholder="Masukkan nama hewan"
                     required
                 >
-                @error('nama_pet')
+                @error('nama')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -43,7 +44,7 @@
                     <option value="">Pilih Pemilik</option>
                     @foreach ($pemilik as $item)
                         <option value="{{ $item->idpemilik }}" {{ old('idpemilik') == $item->idpemilik ? 'selected' : '' }}>
-                            {{ $item->nama_pemilik }} ({{ $item->no_hp }})
+                            {{ $item->nama_pemilik }} ({{ $item->no_hp ?? 'N/A' }})
                         </option>
                     @endforeach
                 </select>
@@ -110,8 +111,9 @@
                 <label for="jenis_kelamin">Jenis Kelamin <span class="text-danger">*</span></label>
                 <select id="jenis_kelamin" name="jenis_kelamin" required>
                     <option value="">Pilih Jenis Kelamin</option>
-                    <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                    <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    {{-- FIX: Ubah ke Jantan/Betina sesuai Model Mutator --}}
+                    <option value="Jantan" {{ old('jenis_kelamin') == 'Jantan' ? 'selected' : '' }}>Jantan</option>
+                    <option value="Betina" {{ old('jenis_kelamin') == 'Betina' ? 'selected' : '' }}>Betina</option>
                 </select>
                 @error('jenis_kelamin')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -120,15 +122,16 @@
 
             {{-- Warna --}}
             <div class="form-group">
-                <label for="warna">Warna</label>
+                {{-- FIX: Ubah 'warna' ke 'warna_tanda' --}}
+                <label for="warna_tanda">Warna / Tanda Khas</label>
                 <input
                     type="text"
-                    id="warna"
-                    name="warna"
-                    value="{{ old('warna') }}"
+                    id="warna_tanda"
+                    name="warna_tanda"
+                    value="{{ old('warna_tanda') }}"
                     placeholder="Contoh: Coklat Putih"
                 >
-                @error('warna')
+                @error('warna_tanda')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -145,31 +148,50 @@ document.addEventListener('DOMContentLoaded', function () {
     const jenisHewanSelect = document.getElementById('idjenis_hewan');
     const rasHewanSelect = document.getElementById('idras_hewan');
     const rasOptions = rasHewanSelect.querySelectorAll('.ras-option');
+    // Simpan nilai lama (old value) untuk ras hewan
+    const oldRasValue = '{{ old('idras_hewan') }}';
 
     function filterRas() {
         const selectedJenisId = jenisHewanSelect.value;
         let foundRas = false;
-
-        // Reset and hide all options
+        
+        // Reset selection and visibility
+        rasHewanSelect.value = '';
         rasOptions.forEach(option => {
             option.style.display = 'none';
             option.removeAttribute('selected');
         });
 
-        // Show options matching the selected Jenis Hewan
+        // Tampilkan opsi yang cocok dengan Jenis Hewan yang dipilih
         rasOptions.forEach(option => {
             if (option.getAttribute('data-idjenis') === selectedJenisId) {
                 option.style.display = '';
+                
+                // Coba pilih ras yang sesuai dengan old value
+                if (oldRasValue && option.value === oldRasValue && !foundRas) {
+                     option.setAttribute('selected', 'selected');
+                     rasHewanSelect.value = oldRasValue;
+                     foundRas = true;
+                }
+                
+                // Jika tidak ada old value yang dipilih, pilih yang pertama secara default
                 if (!foundRas) {
-                    option.setAttribute('selected', 'selected'); // Pilih ras pertama yang cocok
-                    foundRas = true;
+                    // Hanya tandai yang pertama, jangan langsung set value
+                    if(rasHewanSelect.value === '') {
+                        rasHewanSelect.value = option.value;
+                    }
                 }
             }
         });
         
-        // Reset the selected value if the current value is no longer visible
+        // Pastikan rasHewanSelect memiliki value yang terlihat (jika tidak, reset)
         if (rasHewanSelect.querySelector('option:checked') && rasHewanSelect.querySelector('option:checked').style.display === 'none') {
             rasHewanSelect.value = '';
+        }
+        
+        // Jika tidak ada jenis hewan yang dipilih, tampilkan opsi default
+        if (!selectedJenisId) {
+             rasHewanSelect.value = '';
         }
     }
 

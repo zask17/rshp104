@@ -42,7 +42,8 @@
                 @forelse ($pets as $pet)
                 <tr>
                     <td>{{ $pet->idpet }}</td>
-                    <td><strong>{{ $pet->nama_pet }}</strong></td>
+                    {{-- FIX: Ubah nama_pet ke nama (sesuai Model) --}}
+                    <td><strong>{{ $pet->nama }}</strong></td> 
                     <td>{{ $pet->pemilik->nama_pemilik ?? 'N/A' }}</td>
                     <td>{{ $pet->jenisHewan->nama_jenis_hewan ?? 'N/A' }}</td>
                     <td>{{ $pet->rasHewan->nama_ras ?? 'N/A' }}</td>
@@ -58,7 +59,8 @@
                         <form action="{{ route('admin.pets.destroy', $pet->idpet) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data pasien {{ $pet->nama_pet }}? Tindakan ini tidak dapat dibatalkan jika ada rekam medis terkait.')">
+                            {{-- FIX: Ubah nama_pet ke nama --}}
+                            <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data pasien {{ $pet->nama }}? Tindakan ini tidak dapat dibatalkan jika ada rekam medis terkait.')">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
                         </form>

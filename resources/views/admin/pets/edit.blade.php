@@ -5,7 +5,8 @@
 @section('content')
 <div class="page-container">
     <div class="form-container">
-        <h1>Edit Data Pasien (Pet): {{ $pet->nama_pet }}</h1>
+        {{-- FIX: Ubah nama_pet ke nama --}}
+        <h1>Edit Data Pasien (Pet): {{ $pet->nama }}</h1>
         
         <a href="{{ route('admin.pets.index') }}" class="back-link">
             <i class="fas fa-arrow-left"></i> Kembali ke Daftar Pasien
@@ -23,16 +24,17 @@
 
             {{-- Nama Pet --}}
             <div class="form-group">
-                <label for="nama_pet">Nama Pasien <span class="text-danger">*</span></label>
+                {{-- FIX: Ubah nama_pet ke nama --}}
+                <label for="nama">Nama Pasien <span class="text-danger">*</span></label>
                 <input
                     type="text"
-                    id="nama_pet"
-                    name="nama_pet"
-                    value="{{ old('nama_pet', $pet->nama_pet) }}"
+                    id="nama"
+                    name="nama"
+                    value="{{ old('nama', $pet->nama) }}"
                     placeholder="Masukkan nama hewan"
                     required
                 >
-                @error('nama_pet')
+                @error('nama')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -47,7 +49,7 @@
                             value="{{ $item->idpemilik }}" 
                             {{ old('idpemilik', $pet->idpemilik) == $item->idpemilik ? 'selected' : '' }}
                         >
-                            {{ $item->nama_pemilik }} ({{ $item->no_hp }})
+                            {{ $item->nama_pemilik }} ({{ $item->no_hp ?? 'N/A' }})
                         </option>
                     @endforeach
                 </select>
@@ -117,8 +119,10 @@
                 <label for="jenis_kelamin">Jenis Kelamin <span class="text-danger">*</span></label>
                 <select id="jenis_kelamin" name="jenis_kelamin" required>
                     <option value="">Pilih Jenis Kelamin</option>
-                    <option value="Laki-laki" {{ old('jenis_kelamin', $pet->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                    <option value="Perempuan" {{ old('jenis_kelamin', $pet->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    {{-- FIX: Ubah ke Jantan/Betina sesuai Model Mutator --}}
+                    {{-- $pet->jenis_kelamin akan diubah oleh Accessor menjadi 'Jantan' atau 'Betina' --}}
+                    <option value="Jantan" {{ old('jenis_kelamin', $pet->jenis_kelamin) == 'Jantan' ? 'selected' : '' }}>Jantan</option>
+                    <option value="Betina" {{ old('jenis_kelamin', $pet->jenis_kelamin) == 'Betina' ? 'selected' : '' }}>Betina</option>
                 </select>
                 @error('jenis_kelamin')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -127,15 +131,16 @@
 
             {{-- Warna --}}
             <div class="form-group">
-                <label for="warna">Warna</label>
+                {{-- FIX: Ubah 'warna' ke 'warna_tanda' --}}
+                <label for="warna_tanda">Warna / Tanda Khas</label>
                 <input
                     type="text"
-                    id="warna"
-                    name="warna"
-                    value="{{ old('warna', $pet->warna) }}"
+                    id="warna_tanda"
+                    name="warna_tanda"
+                    value="{{ old('warna_tanda', $pet->warna_tanda) }}"
                     placeholder="Contoh: Coklat Putih"
                 >
-                @error('warna')
+                @error('warna_tanda')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
@@ -152,36 +157,48 @@ document.addEventListener('DOMContentLoaded', function () {
     const jenisHewanSelect = document.getElementById('idjenis_hewan');
     const rasHewanSelect = document.getElementById('idras_hewan');
     const rasOptions = rasHewanSelect.querySelectorAll('.ras-option');
+    // Ambil nilai ras hewan dari database
+    const initialRasValue = '{{ old('idras_hewan', $pet->idras_hewan) }}';
 
     function filterRas() {
         const selectedJenisId = jenisHewanSelect.value;
-        let foundRas = false;
-        let selectedRasValue = rasHewanSelect.value; // Simpan nilai yang sedang dipilih
-
+        
         // Reset and hide all options
         rasOptions.forEach(option => {
             option.style.display = 'none';
+            option.removeAttribute('selected');
         });
 
+        let foundRas = false;
+        
         // Tampilkan opsi yang cocok dengan Jenis Hewan yang dipilih
         rasOptions.forEach(option => {
             if (option.getAttribute('data-idjenis') === selectedJenisId) {
                 option.style.display = '';
+                
+                // Pertahankan pilihan awal atau pilihan lama
+                if (option.value == initialRasValue && !foundRas) {
+                     option.setAttribute('selected', 'selected');
+                     rasHewanSelect.value = initialRasValue;
+                     foundRas = true;
+                }
             }
         });
         
-        // Cek apakah ras yang sedang dipilih (selectedRasValue) masih ada di jenis yang baru
-        const currentSelectedOption = rasHewanSelect.querySelector(`option[value="${selectedRasValue}"]`);
-        
-        if (!currentSelectedOption || currentSelectedOption.style.display === 'none') {
-            // Jika ras yang dipilih sebelumnya tidak cocok dengan jenis baru, hapus pilihan.
+        // Jika ras yang dipilih sebelumnya tidak cocok atau tidak ada, reset value.
+        if (!foundRas && selectedJenisId) {
             rasHewanSelect.value = '';
-
-            // Coba pilih ras pertama yang cocok di jenis baru
-            const firstValidOption = rasHewanSelect.querySelector(`option.ras-option[data-idjenis="${selectedJenisId}"]`);
+            // Coba pilih ras pertama yang valid untuk jenis ini
+            const firstValidOption = rasHewanSelect.querySelector(`.ras-option[data-idjenis="${selectedJenisId}"]`);
             if (firstValidOption) {
-                 rasHewanSelect.value = firstValidOption.value;
+                firstValidOption.setAttribute('selected', 'selected');
+                rasHewanSelect.value = firstValidOption.value;
             }
+        }
+        
+        // Jika tidak ada jenis hewan yang dipilih, tampilkan opsi default
+        if (!selectedJenisId) {
+             rasHewanSelect.value = '';
         }
     }
 

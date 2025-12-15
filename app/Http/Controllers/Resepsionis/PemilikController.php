@@ -34,7 +34,7 @@ class PemilikController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
-            'telepon' => 'required|string|max:15|unique:pemilik,telepon',
+            'no_wa' => 'required|string|max:15|unique:pemilik,telepon',
         ]);
 
         try {
@@ -59,10 +59,9 @@ class PemilikController extends Controller
     public function update(Request $request, Pemilik $pemilik)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama_pemilik' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
-            // Pengecualian unique untuk data saat ini
-            'telepon' => 'required|string|max:15|unique:pemilik,telepon,' . $pemilik->idpemilik . ',idpemilik',
+            'no_wa' => 'required|string|max:15|unique:pemilik,no_wa,' . $pemilik->idpemilik . ',idpemilik',
         ]);
 
         try {

@@ -29,7 +29,7 @@ class PetController extends Controller
     public function create()
     {
         // Ambil data untuk dropdown
-        $pemiliks = Pemilik::orderBy('nama')->get();
+        $pemiliks = Pemilik::orderBy('nama_pemilik')->get();
         $jenisHewans = JenisHewan::orderBy('nama_jenis_hewan')->get();
         $rasHewans = RasHewan::orderBy('nama_ras')->get();
 
@@ -47,11 +47,12 @@ class PetController extends Controller
             'idjenis_hewan' => 'required|exists:jenis_hewan,idjenis_hewan',
             'idras_hewan' => 'nullable|exists:ras_hewan,idras_hewan',
             'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Jantan,Betina',
+            'jenis_kelamin' => 'required|in:Jantan,Betina', 
             'warna_tanda' => 'nullable|string|max:255',
         ]);
 
         try {
+            // Model Mutator akan mengkonversi 'Jantan'/'Betina' menjadi '1'/'2'
             Pet::create($request->all());
             return redirect()->route('resepsionis.pets.index')->with('success', 'Data Pasien berhasil ditambahkan!');
         } catch (\Exception $e) {
@@ -65,7 +66,7 @@ class PetController extends Controller
     public function edit(Pet $pet)
     {
         // Ambil data untuk dropdown
-        $pemiliks = Pemilik::orderBy('nama')->get();
+        $pemiliks = Pemilik::orderBy('nama_pemilik')->get();
         $jenisHewans = JenisHewan::orderBy('nama_jenis_hewan')->get();
         $rasHewans = RasHewan::orderBy('nama_ras')->get();
 
@@ -78,16 +79,17 @@ class PetController extends Controller
     public function update(Request $request, Pet $pet)
     {
         $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string',
             'idpemilik' => 'required|exists:pemilik,idpemilik',
             'idjenis_hewan' => 'required|exists:jenis_hewan,idjenis_hewan',
             'idras_hewan' => 'nullable|exists:ras_hewan,idras_hewan',
             'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Jantan,Betina',
-            'warna_tanda' => 'nullable|string|max:255',
+            'jenis_kelamin' => 'required|in:Jantan,Betina', 
+            'warna_tanda' => 'nullable|string',
         ]);
 
         try {
+            // Model Mutator akan mengkonversi 'Jantan'/'Betina' menjadi '1'/'2'
             $pet->update($request->all());
             return redirect()->route('resepsionis.pets.index')->with('success', 'Data Pasien berhasil diperbarui!');
         } catch (\Exception $e) {

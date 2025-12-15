@@ -93,6 +93,7 @@
                 <label for="jenis_kelamin">Jenis Kelamin <span class="text-danger">*</span></label>
                 <select id="jenis_kelamin" name="jenis_kelamin" required>
                     <option value="">-- Pilih Jenis Kelamin --</option>
+                    {{-- $pet->jenis_kelamin akan diekstrak sebagai 'Jantan' atau 'Betina' berkat Accessor --}}
                     <option value="Jantan" {{ old('jenis_kelamin', $pet->jenis_kelamin) == 'Jantan' ? 'selected' : '' }}>Jantan</option>
                     <option value="Betina" {{ old('jenis_kelamin', $pet->jenis_kelamin) == 'Betina' ? 'selected' : '' }}>Betina</option>
                 </select>
