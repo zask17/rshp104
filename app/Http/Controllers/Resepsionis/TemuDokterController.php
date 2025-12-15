@@ -17,8 +17,11 @@ class TemuDokterController extends Controller
     public function index()
     {
         // FIX: Menggunakan 'idreservasi_dokter' untuk pengurutan
-        // Menggunakan with(['pet.pemilik', 'roleUser.user']) untuk eager loading relasi berlapis
-        $temuDokters = TemuDokter::with(['pet.pemilik', 'roleUser.user'])->orderBy('idreservasi_dokter', 'desc')->get();
+        $temuDokters = TemuDokter::whereDate('tanggal_temu', '!=', now()->toDateString()) // Hanya Janji Temu non-harian
+                            ->with(['pet.pemilik', 'roleUser.user'])
+                            ->orderBy('tanggal_temu', 'desc') 
+                            ->orderBy('waktu_temu', 'desc')
+                            ->get();
         
         return view('resepsionis.temu-dokter.index', compact('temuDokters'));
     }
@@ -29,10 +32,11 @@ class TemuDokterController extends Controller
     public function create()
     {
         $pets = Pet::with('pemilik')->get(); // Ambil semua pasien
-        // Ambil user yang ber-role dokter (asumsi role id 2 adalah Dokter)
+        // Ambil user yang ber-role dokter (ID Role Dokter = 2)
         $dokters = User::whereHas('roles', function($query) {
-                        $query->where('idrole', 2); // ID Role Dokter = 2
-                    })->orderBy('name')->get(); 
+                        // FIX AMBIGUITAS: Kualifikasi kolom 'role.idrole'
+                        $query->where('role.idrole', 2); 
+                    })->orderBy('nama')->get(); 
 
         return view('resepsionis.temu-dokter.create', compact('pets', 'dokters'));
     }
@@ -44,7 +48,6 @@ class TemuDokterController extends Controller
     {
         $request->validate([
             'idpet' => 'required|exists:pet,idpet',
-            // iddokter di sini adalah ID USER. Kita perlu mencari ID ROLE_USER yang sesuai.
             'iddokter' => 'required|exists:user,iduser', 
             'tanggal_temu' => 'required|date',
             'waktu_temu' => 'required|date_format:H:i',
@@ -52,7 +55,7 @@ class TemuDokterController extends Controller
             'status' => 'required|in:Pending,Dikonfirmasi,Selesai,Dibatalkan',
         ]);
         
-        // Cari idrole_user (FK di tabel temu_dokter) dari id user yang dipilih (iddokter)
+        // Cari idrole_user
         $roleUser = DB::table('role_user')
                         ->where('iduser', $request->iddokter)
                         ->where('idrole', 2) // Asumsi ID Role Dokter adalah 2
@@ -92,10 +95,11 @@ class TemuDokterController extends Controller
     public function edit(TemuDokter $temuDokter)
     {
         $pets = Pet::with('pemilik')->get();
-        // Ambil user yang ber-role dokter (asumsi role id 2 adalah Dokter)
+        // Ambil user yang ber-role dokter (ID Role Dokter = 2)
         $dokters = User::whereHas('roles', function($query) {
-                        $query->where('idrole', 2); 
-                    })->orderBy('name')->get(); 
+                        // FIX AMBIGUITAS: Kualifikasi kolom 'role.idrole'
+                        $query->where('role.idrole', 2); 
+                    })->orderBy('nama')->get(); 
         
         // Dapatkan ID USER dari idrole_user yang tersimpan
         $temuDokter->iddokter = $temuDokter->roleUser->iduser ?? null;
@@ -117,7 +121,7 @@ class TemuDokterController extends Controller
             'status' => 'required|in:Pending,Dikonfirmasi,Selesai,Dibatalkan',
         ]);
         
-        // Cari idrole_user (FK di tabel temu_dokter) dari id user yang dipilih (iddokter)
+        // Cari idrole_user
         $roleUser = DB::table('role_user')
                         ->where('iduser', $request->iddokter)
                         ->where('idrole', 2) // Asumsi ID Role Dokter adalah 2
@@ -135,7 +139,6 @@ class TemuDokterController extends Controller
                 'waktu_temu' => $request->waktu_temu,
                 'alasan' => $request->alasan,
                 'status' => $request->status,
-                // 'no_urut' dan 'waktu_daftar' tidak diubah saat update status/dokter
             ]);
             
             return redirect()->route('resepsionis.temu-dokter.index')->with('success', 'Janji Temu berhasil diperbarui!');

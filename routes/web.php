@@ -194,9 +194,18 @@ Route::middleware(['isPerawat'])->group(function () {
 Route::middleware(['isResepsionis'])->group(function () {
     Route::get('/resepsionis/dashboard', [DashboardResepsionisController::class, 'index'])->name('resepsionis.dashboard');
     
-    // Rute untuk Pendaftaran
-    Route::get('/resepsionis/pendaftaran', [PendaftaranController::class, 'index'])->name('resepsionis.pendaftaran');
-    
+    // --- 1. REGISTRASI PASIEN SAAT INI (Walk-in/Antrean Harian) ---
+    // Menggunakan PendaftaranController sebagai Resource CRUD untuk registrasi harian
+    Route::resource('resepsionis/pendaftaran', PendaftaranController::class)
+        ->parameters(['pendaftaran' => 'pendaftaran']) // Model binding tidak perlu, pakai ID
+        ->names('resepsionis.pendaftaran');
+        
+    // --- 2. MANAJEMEN JANJI TEMU (Appointments) ---
+    // Menggunakan TemuDokterController sebagai Resource CRUD untuk janji temu non-harian
+    Route::resource('resepsionis/temu-dokter', TemuDokterController::class)
+        ->parameters(['temu-dokter' => 'temuDokter'])
+        ->names('resepsionis.temu-dokter');
+        
     // Rute Resource untuk Pasien (Pets)
     Route::resource('resepsionis/pets', ResepsionisPetController::class)
         ->parameters(['pets' => 'pet'])
@@ -206,15 +215,4 @@ Route::middleware(['isResepsionis'])->group(function () {
     Route::resource('resepsionis/pemilik', ResepsionisPemilikController::class)
         ->parameters(['pemilik' => 'pemilik'])
         ->names('resepsionis.pemilik');
-        
-    // Rute Resource untuk Temu Dokter
-    Route::resource('resepsionis/temu-dokter', TemuDokterController::class)
-        ->parameters(['temu-dokter' => 'temuDokter'])
-        ->names('resepsionis.temu-dokter');
-});
-
-//akses Pemilik
-Route::middleware(['isPemilik'])->group(function () {
-    Route::get('/pemilik/dashboard', [DashboardPemilikController::class, 'index'])->name('pemilik.dashboard');
-    Route::get('/pemilik/pets', [PeliharaanController::class, 'index'])->name('pemilik.pets.index');
 });

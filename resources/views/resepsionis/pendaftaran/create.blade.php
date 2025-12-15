@@ -2,64 +2,68 @@
 
 @section('content')
 <div class="page-container">
-    <div class="page-header">
-        <h1>Manajemen Ras Hewan</h1>
-        <p>Kelola berbagai ras dari setiap jenis hewan.</p>
-    </div>
+    <div class="form-container">
+        <h1><i class="fas fa-user-plus"></i> Registrasi Pasien (Walk-in)</h1>
+        <p>Mendaftarkan pasien untuk kunjungan hari ini.</p>
 
-    <div class="main-content">
-        @if (session('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
-        
+        <a href="{{ route('resepsionis.pendaftaran.index') }}" class="back-link">
+            <i class="fas fa-arrow-left"></i> Kembali ke Antrean Pendaftaran
+        </a>
+
         @if (session('error'))
             <div class="alert alert-danger" role="alert">
                 {{ session('error') }}
             </div>
         @endif
 
-        <a href="{{ route('admin.ras-hewan.create') }}" class="add-btn">
-            <i class="fas fa-plus"></i> Tambah Ras Hewan
-        </a>
+        <form action="{{ route('resepsionis.pendaftaran.store') }}" method="POST">
+            @csrf
 
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama Ras</th>
-                    <th>Jenis Hewan</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($rasHewan as $ras)
-                <tr>
-                    <td>{{ $ras->idras_hewan }}</td>
-                    <td>{{ $ras->nama_ras }}</td>
-                    <td>{{ $ras->jenis->nama_jenis_hewan ?? 'N/A' }}</td>
-                    <td class="action-buttons">
-                        <a href="{{ route('admin.ras-hewan.edit', $ras->idras_hewan) }}" class="edit-btn">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
+            {{-- Pasien (Pet) --}}
+            <div class="form-group">
+                <label for="idpet">Pilih Pasien (Pet) <span class="text-danger">*</span></label>
+                <select id="idpet" name="idpet" required class="form-control select2-field">
+                    <option value="">-- Cari Nama Pet atau Pemilik --</option>
+                    @foreach ($pets as $pet)
+                        <option value="{{ $pet->idpet }}" {{ old('idpet') == $pet->idpet ? 'selected' : '' }}>
+                            {{ $pet->nama }} (Pemilik: {{ $pet->pemilik->nama_pemilik ?? 'N/A' }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('idpet')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
 
-                        <form action="{{ route('admin.ras-hewan.destroy', $ras->idras_hewan) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus ras {{ $ras->nama_ras }}? Tindakan ini tidak dapat dibatalkan.')">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="4" style="text-align: center;">Tidak ada data ras hewan.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+            {{-- Dokter --}}
+            <div class="form-group">
+                <label for="iddokter">Pilih Dokter Bertugas <span class="text-danger">*</span></label>
+                <select id="iddokter" name="iddokter" required class="form-control select2-field">
+                    <option value="">-- Pilih Dokter --</option>
+                    @foreach ($dokters as $dokter)
+                        <option value="{{ $dokter->iduser }}" {{ old('iddokter') == $dokter->iduser ? 'selected' : '' }}>
+                            {{ $dokter->nama }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('iddokter')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Alasan/Keluhan --}}
+            <div class="form-group">
+                <label for="alasan">Alasan/Keluhan Singkat</label>
+                <textarea id="alasan" name="alasan" rows="3"
+                    placeholder="Contoh: Panas dan tidak nafsu makan">{{ old('alasan') }}</textarea>
+                @error('alasan')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-check"></i> Daftarkan Pasien
+            </button>
+        </form>
     </div>
 </div>
-@endsection

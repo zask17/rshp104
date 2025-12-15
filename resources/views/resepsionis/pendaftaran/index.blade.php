@@ -3,8 +3,8 @@
 @section('content')
     <div class="page-container">
         <div class="page-header">
-            <h1><i class="fas fa-clipboard-list"></i> Antrean Pendaftaran (Temu Dokter)</h1>
-            <p>Daftar pasien yang dijadwalkan untuk konsultasi pada tanggal {{ \Carbon\Carbon::parse($today)->translatedFormat('l, d F Y') }}</p>
+            <h1><i class="fas fa-clipboard-list"></i> Antrean Pendaftaran Hari Ini</h1>
+            <p>Daftar pasien yang registrasi (walk-in) pada tanggal **{{ \Carbon\Carbon::parse($today)->translatedFormat('l, d F Y') }}**.</p>
         </div>
 
         <div class="main-content">
@@ -14,19 +14,26 @@
                 </div>
             @endif
 
-            <div class="info-box">
-                <i class="fas fa-info-circle"></i> Data ini menampilkan antrean janji temu yang berstatus 'Pending' atau 'Dikonfirmasi' pada hari ini.
-            </div>
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
+            {{-- Tombol Tambah diarahkan ke create Pendaftaran --}}
+            <a href="{{ route('resepsionis.pendaftaran.create') }}" class="add-btn">
+                <i class="fas fa-user-plus"></i> Registrasi Pasien Baru (Walk-in)
+            </a>
 
             <table class="data-table">
                 <thead>
                     <tr>
                         <th>No. Urut</th>
-                        <th>Waktu Temu</th>
+                        <th>Waktu Registrasi</th>
                         <th>Status</th>
-                        <th>Nama Pasien (Pet)</th>
-                        <th>Nama Pemilik</th>
-                        <th>Dokter Bertugas</th>
+                        <th>Pasien (Pet)</th>
+                        <th>Pemilik</th>
+                        <th>Dokter</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -37,19 +44,32 @@
                             <td>{{ \Carbon\Carbon::parse($pendaftaran->waktu_temu)->format('H:i') }} WIB</td>
                             <td>
                                 @php
-                                    $statusClass = ($pendaftaran->status == 'Dikonfirmasi') ? 'status-confirmed' : 'status-pending';
+                                    $statusClass = '';
+                                    if ($pendaftaran->status == 'Pending') $statusClass = 'status-pending';
+                                    elseif ($pendaftaran->status == 'Dikonfirmasi') $statusClass = 'status-confirmed';
+                                    elseif ($pendaftaran->status == 'Selesai') $statusClass = 'status-completed';
+                                    else $statusClass = 'status-cancelled';
                                 @endphp
                                 <span class="status-badge {{ $statusClass }}">{{ $pendaftaran->status }}</span>
                             </td>
                             <td>{{ $pendaftaran->pet->nama ?? 'N/A' }}</td>
                             <td>{{ $pendaftaran->pet->pemilik->nama_pemilik ?? 'N/A' }}</td>
-                            {{-- Akses nama dokter melalui relasi RoleUser -> User --}}
                             <td>{{ $pendaftaran->roleUser->user->nama ?? 'N/A' }}</td>
                             <td class="action-buttons">
-                                {{-- Link Edit mengarah ke Edit Temu Dokter --}}
-                                <a href="{{ route('resepsionis.temu-dokter.edit', $pendaftaran->idreservasi_dokter) }}" class="edit-btn">
+                                {{-- Link Edit mengarah ke Edit Pendaftaran --}}
+                                <a href="{{ route('resepsionis.pendaftaran.edit', $pendaftaran->idreservasi_dokter) }}" class="edit-btn">
                                     <i class="fas fa-edit"></i> Kelola
                                 </a>
+                                {{-- Form Delete --}}
+                                <form action="{{ route('resepsionis.pendaftaran.destroy', $pendaftaran->idreservasi_dokter) }}" method="POST"
+                                    style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-btn"
+                                        onclick="return confirm('Apakah Anda yakin ingin membatalkan pendaftaran ini?')">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @empty
@@ -65,7 +85,6 @@
 
 @push('styles')
 <style>
-    /* Styling dasar untuk status badge */
     .status-badge {
         display: inline-block;
         padding: 4px 8px;
@@ -76,5 +95,7 @@
     }
     .status-pending { background-color: #f39c12; }
     .status-confirmed { background-color: #2ecc71; }
+    .status-completed { background-color: #3498db; }
+    .status-cancelled { background-color: #e74c3c; }
 </style>
 @endpush

@@ -22,7 +22,7 @@
             @endif
 
             <div class="dashboard-grid">
-                <a href="{{ route('resepsionis.pendaftaran') }}" class="dashboard-card">
+                <a href="{{ route('resepsionis.pendaftaran.index') }}" class="dashboard-card">
                     <h3><i class="fas fa-paw"></i> Daftar Pendaftaran</h3>
                     <p>Lihat antrean pendaftaran dan mulai registrasi pasien baru.</p>
                 </a>
