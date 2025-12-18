@@ -73,7 +73,7 @@
                         $dashboardRoute = route('resepsionis.dashboard');
                         $dashboardName = 'Dashboard Resepsionis';
                         break;
-                    default: // Pemilik atau Role lain yang tidak spesifik
+                    case '5': // Pemilik atau Role lain yang tidak spesifik
                         // Mengikuti logika default di LoginController yang mengarahkan ke pemilik.dashboard
                         $dashboardRoute = route('pemilik.dashboard');
                         $dashboardName = 'Dashboard Pemilik';

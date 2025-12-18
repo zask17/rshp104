@@ -131,7 +131,7 @@ Route::middleware('isAdministrator')->group(function () {
         ])->names('admin.kategori-klinis');;
 
     // PEMILIK
-    Route::get('/pemilik', [AdminPemilikController::class, 'index'])->name('admin.pemilik.index');
+    Route::get('/pemilik', [AdminPemilikController::class, 'index'])->name('admin.pemilik');
     Route::get('/pemilik/create', [AdminPemilikController::class, 'create'])->name('admin.pemilik.create');
     Route::post('/pemilik', [AdminPemilikController::class, 'store'])->name('admin.pemilik.store');
     Route::get('/pemilik/{pemilik}/edit', [AdminPemilikController::class, 'edit'])->name('admin.pemilik.edit');
@@ -212,10 +212,6 @@ Route::middleware(['isDokter'])->group(function () {
     Route::get('/dokter/profile', [ProfileController::class, 'index'])->name('dokter.profile.index');
 });
 
-//AKSES PERAWAT
-Route::middleware(['isPerawat'])->group(function () {
-    Route::get('/perawat/dashboard', [DashboardPerawatController::class, 'index'])->name('perawat.dashboard');
-});
 
 // AKSES RESEPSIONIS
 Route::middleware(['isResepsionis'])->group(function () {
@@ -246,4 +242,16 @@ Route::get('/get-ras/{id}', [App\Http\Controllers\Resepsionis\PetController::cla
     Route::resource('resepsionis/pemilik', ResepsionisPemilikController::class)
         ->parameters(['pemilik' => 'pemilik'])
         ->names('resepsionis.pemilik');
+});
+
+
+//AKSES PERAWAT
+Route::middleware(['isPerawat'])->group(function () {
+    Route::get('/perawat/dashboard', [DashboardPerawatController::class, 'index'])->name('perawat.dashboard');
+});
+
+
+//AKSES PEMILIK
+Route::middleware(['isPemilik'])->group(function () {
+    Route::get('/pemilik/dashboard', [DashboardPemilikController::class, 'index'])->name('pemilik.dashboard');
 });
