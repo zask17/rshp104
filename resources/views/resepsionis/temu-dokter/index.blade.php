@@ -45,7 +45,7 @@
                             {{-- Menggunakan idreservasi_dokter sebagai primary key yang pasti ada --}}
                             {{-- <td>{{ $temu->idreservasi_dokter }}</td>  --}}
                             
-                            <td>{{ $temu->no_urut ?? 'N/A' }}</td>
+                            <td>{{ $loop->iteration }}</td>
                             
                             <td>
                                 @php

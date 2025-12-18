@@ -219,7 +219,7 @@ Route::middleware(['isResepsionis'])->group(function () {
 
     // --- FITUR DROPDOWN RAS (Letakkan di sini) ---
     // Pastikan menggunakan ResepsionisPetController jika itu yang mengelola data pet
-Route::get('/get-ras/{id}', [App\Http\Controllers\Resepsionis\PetController::class, 'getRasByJenis'])->name('get.ras.by.jenis');
+    Route::get('/get-ras/{id}', [App\Http\Controllers\Resepsionis\PetController::class, 'getRasByJenis'])->name('get.ras.by.jenis');
 
     // --- 1. REGISTRASI PASIEN SAAT INI (Walk-in/Antrean Harian) ---
     // Menggunakan PendaftaranController sebagai Resource CRUD untuk registrasi harian
@@ -237,6 +237,9 @@ Route::get('/get-ras/{id}', [App\Http\Controllers\Resepsionis\PetController::cla
     Route::resource('resepsionis/pets', ResepsionisPetController::class)
         ->parameters(['pets' => 'pet'])
         ->names('resepsionis.pets');
+
+    // Route untuk AJAX Ras Hewan (WAJIB ADA)
+    Route::get('/get-ras/{id}', [PetController::class, 'getRasByJenis'])->name('get.ras.by.jenis');
 
     // Rute Resource untuk Pemilik
     Route::resource('resepsionis/pemilik', ResepsionisPemilikController::class)

@@ -18,7 +18,9 @@ class PetController extends Controller
     public function index()
     {
         // Mengambil semua data Pet beserta relasi pemilik, jenisHewan, dan rasHewan
-        $pets = Pet::with(['pemilik', 'jenisHewan', 'rasHewan'])->orderBy('idpet', 'desc')->get();
+        $pets = Pet::with(['pemilik', 'jenisHewan', 'rasHewan'])
+            ->orderBy('idpet', 'asc')
+            ->get();
 
         return view('resepsionis.pets.index', compact('pets'));
     }
@@ -100,7 +102,7 @@ class PetController extends Controller
     // Ras Hewan yang muncul sesuai dengan Jenis Hewan yang dipilih (AJAX)
     public function getRasByJenis($id)
     {
-        $ras = \App\Models\RasHewan::where('idjenis_hewan', $id)->orderBy('nama_ras')->get();
+        $ras = \App\Models\RasHewan::where('idjenis_hewan', $id)->orderBy('nama_ras', 'asc')->get();
         return response()->json($ras);
     }
 
