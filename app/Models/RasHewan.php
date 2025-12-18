@@ -25,4 +25,13 @@ class RasHewan extends Model
     {
         return $this->hasMany(Pet::class, 'idras_hewan', 'idras_hewan');
     }
+
+    /**
+     * Relationship to JenisHewan
+     */
+    public function jenisHewan()
+    {
+        // Each Ras belongs to one Jenis
+        return $this->belongsTo(JenisHewan::class, 'idjenis_hewan', 'idjenis_hewan');
+    }
 }

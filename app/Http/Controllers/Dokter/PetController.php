@@ -13,7 +13,7 @@ class PetController extends Controller
     {
         // Load relasi Pemilik dan Ras Hewan
         $pets = Pet::with(['pemilik.user', 'rasHewan.jenisHewan'])
-            ->orderBy('idpet', 'desc')
+            ->orderBy('idpet', 'asc')
             ->paginate(10);
 
         return view('dokter.pasien.index', compact('pets'));

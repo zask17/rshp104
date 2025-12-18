@@ -9,13 +9,10 @@ class TemuDokter extends Model
 {
     use HasFactory;
     
-    // Nama tabel sesuai DDL Anda
     protected $table = 'temu_dokter'; 
     
-    // FIX: Definisikan primary key yang benar
     protected $primaryKey = 'idreservasi_dokter'; 
     
-    // Matikan timestamps karena tabel temu_dokter tidak memiliki created_at/updated_at default
     public $timestamps = false; 
 
     protected $fillable = [
@@ -45,7 +42,12 @@ class TemuDokter extends Model
     // Ini membantu di index view untuk menampilkan nama dokter
     public function dokter()
     {
-        // Mengakses relasi RoleUser, dan memuat relasi User dari RoleUser
-        return $this->roleUser()->with('user');
+        // Relasi ke RoleUser (Dokter Pemeriksa)
+        return $this->belongsTo(RoleUser::class, 'idrole_user', 'idrole_user');
+    }
+
+    public function rekamMedis()
+    {
+        return $this->hasOne(RekamMedis::class, 'idreservasi_dokter', 'idreservasi_dokter');
     }
 }

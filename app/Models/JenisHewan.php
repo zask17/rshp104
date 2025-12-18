@@ -20,4 +20,10 @@ class JenisHewan extends Model
     {
         return $this->hasMany(RasHewan::class, 'idjenis_hewan', 'idjenis_hewan');
     }
+
+    public function jenisHewan()
+    {
+        // Parameter: Model tujuan, foreign key di tabel ras_hewan, local key di tabel jenis_hewan
+        return $this->belongsTo(JenisHewan::class, 'idjenis_hewan', 'idjenis_hewan');
+    }
 }

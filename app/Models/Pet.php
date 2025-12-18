@@ -19,7 +19,7 @@ class Pet extends Model
         'idjenis_hewan',
         'idras_hewan',
         'tanggal_lahir',
-        'jenis_kelamin', // Kolom database
+        'jenis_kelamin',
         'warna_tanda',
     ];
 
@@ -79,4 +79,20 @@ class Pet extends Model
     {
         return $this->belongsTo(RasHewan::class, 'idras_hewan', 'idras_hewan');
     }
+
+    // ===============================================
+    // TAMBAHKAN RELASI UNTUK TEMU DOKTER DAN REKAM MEDIS
+    // ===============================================
+
+    /**
+     * Relasi ke TemuDokter (Janji Temu)
+     * Satu Pet bisa memiliki banyak jadwal temu/riwayat kunjungan
+     */
+    public function temuDokter()
+    {
+        return $this->hasMany(TemuDokter::class, 'idpet', 'idpet');
+    }
+
+
+
 }

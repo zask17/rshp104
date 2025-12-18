@@ -254,7 +254,11 @@ Route::middleware(['isResepsionis'])->group(function () {
 Route::middleware(['isPerawat'])->group(function () {
     Route::get('/perawat/dashboard', [DashboardPerawatController::class, 'index'])->name('perawat.dashboard');
     Route::delete('/perawat/rekam-medis/{id}', [DashboardPerawatController::class, 'destroyRekamMedis'])->name('perawat.rm.destroy');
+
+    // 3. PROFIL PERAWAT
     Route::get('/perawat/profile', [App\Http\Controllers\Perawat\ProfileController::class, 'index'])->name('perawat.profile.index');
+    Route::get('/perawat/profile/edit', [App\Http\Controllers\Perawat\ProfileController::class, 'edit'])->name('perawat.profile.edit');
+    Route::put('/perawat/profile/update', [App\Http\Controllers\Perawat\ProfileController::class, 'update'])->name('perawat.profile.update');
 });
 
 
