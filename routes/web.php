@@ -256,7 +256,8 @@ Route::middleware(['isPerawat'])->group(function () {
 });
 
 
-//AKSES PEMILIK
+// AKSES PEMILIK
 Route::middleware(['isPemilik'])->group(function () {
     Route::get('/pemilik/dashboard', [DashboardPemilikController::class, 'index'])->name('pemilik.dashboard');
+    Route::get('/pemilik/rekam-medis/{id}', [DashboardPemilikController::class, 'detailRekamMedis'])->name('pemilik.rm.detail');
 });
