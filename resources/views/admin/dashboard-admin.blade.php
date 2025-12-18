@@ -60,7 +60,7 @@
                     <p>Kelola hak akses dan peran pengguna.</p>
                 </a>
 
-                <a href="{{ route('admin.jenis-hewan.index') }}" class="dashboard-card">
+                <a href="{{ route('admin.jenis-hewan') }}" class="dashboard-card">
                     <h3><i class="fas fa-paw"></i> Jenis Hewan</h3>
                     <p>Kelola kategori utama hewan.</p>
                 </a>

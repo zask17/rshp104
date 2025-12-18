@@ -32,13 +32,13 @@ use App\Http\Controllers\Pemilik\DashboardPemilikController;
 use App\Http\Controllers\Pemilik\PeliharaanController;
 
 // --- Controller Admin yang digunakan ---
-use App\Http\Controllers\Admin\DataMasterController; // <-- FIX
-use App\Http\Controllers\Admin\JenisHewanController; // <-- FIX
-use App\Http\Controllers\Admin\RasHewanController; // <-- FIX
-use App\Http\Controllers\Admin\KategoriController; // <-- FIX
-use App\Http\Controllers\Admin\KategoriKlinisController; // <-- FIX
-use App\Http\Controllers\Admin\PemilikController as AdminPemilikController; // <-- FIX (Di-alias karena PemilikController sudah ada di atas)
-use App\Http\Controllers\Admin\KodeTindakanTerapiController; // <-- FIX
+use App\Http\Controllers\Admin\DataMasterController;
+use App\Http\Controllers\Admin\JenisHewanController;
+use App\Http\Controllers\Admin\RasHewanController;
+use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\KategoriKlinisController;
+use App\Http\Controllers\Admin\PemilikController as AdminPemilikController;
+use App\Http\Controllers\Admin\KodeTindakanTerapiController;
 //-------------------------------------------------------------
 
 /*
@@ -78,7 +78,7 @@ Route::middleware('isAdministrator')->group(function () {
     Route::get('/admin/datamaster', [DataMasterController::class, 'index'])->name('admin.datamaster');
 
     //JENIS HEWAN
-    Route::get('/jenis-hewan.index', [JenisHewanController::class, 'index'])->name('admin.jenis-hewan.index');
+    Route::get('/jenis-hewan.index', [JenisHewanController::class, 'index'])->name('admin.jenis-hewan');
     Route::get('/jenis-hewan/create', [JenisHewanController::class, 'create'])->name('admin.jenis-hewan.create');
     Route::post('/jenis-hewan', [JenisHewanController::class, 'store'])->name('admin.jenis-hewan.store');
     Route::get('/jenis-hewan/{jenisHewan}/edit', [JenisHewanController::class, 'edit'])->name('admin.jenis-hewan.edit');

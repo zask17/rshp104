@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pages')
 
 @section('title', 'LAYANAN RSHP - RSHP UNAIR')
 

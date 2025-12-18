@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.pages')
 
 @section('title', 'VISI MISI & TUJUAN - RSHP UNAIR')
 
