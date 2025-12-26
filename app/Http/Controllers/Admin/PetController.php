@@ -68,12 +68,17 @@ class PetController extends Controller
      */
     public function edit($idpet)
     {
-        // Ambil data untuk dropdown
-        $pemiliks = Pemilik::orderBy('nama_pemilik')->get();
-        $jenisHewans = JenisHewan::orderBy('nama_jenis_hewan')->get();
-        $rasHewans = RasHewan::orderBy('nama_ras')->get();
+        // 1. Ambil data pet berdasarkan ID yang dikirim
+        $pet = Pet::findOrFail($idpet);
 
-        return view('admin.pets.edit', compact('pet', 'pemiliks', 'jenisHewans', 'rasHewans'));
+        // 2. Ambil data pendukung untuk dropdown
+        $pemilik = Pemilik::orderBy('nama_pemilik')->get();
+        $jenisHewan = JenisHewan::orderBy('nama_jenis_hewan')->get();
+        $rasHewan = RasHewan::orderBy('nama_ras')->get();
+
+        // 3. Pastikan variabel yang dikirim ke compact sesuai dengan variabel di atas
+        // Gunakan 'pemilik', 'jenisHewan', dan 'rasHewan' (tanpa 's') agar cocok dengan view Anda
+        return view('admin.pets.edit', compact('pet', 'pemilik', 'jenisHewan', 'rasHewan'));
     }
 
     /**
@@ -81,25 +86,22 @@ class PetController extends Controller
      */
     public function update(Request $request, $idpet)
     {
-        $request->validate([
-            'nama' => 'required|string',
-            'idpemilik' => 'required|exists:pemilik,idpemilik',
-            'idjenis_hewan' => 'required|exists:jenis_hewan,idjenis_hewan',
-            'idras_hewan' => 'nullable|exists:ras_hewan,idras_hewan',
-            'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:Jantan,Betina',
-            'warna_tanda' => 'nullable|string',
-        ]);
+        // 1. Ambil data pet yang akan diupdate
+        $pet = Pet::findOrFail($idpet);
+
+        // 2. Gunakan fungsi helper validasi yang sudah Anda buat
+        $data = $this->validatePet($request, $idpet);
 
         try {
-            // Model Mutator akan mengkonversi 'Jantan'/'Betina' menjadi '1'/'2'
-            $pet->update($request->all());
-            return redirect()->route('admin.pets.index')->with('success', 'Data Pasien berhasil diperbarui!');
+            // 3. Update data (Mutator di Model Pet akan otomatis mengkonversi gender)
+            $pet->update($data);
+
+            return redirect()->route('admin.pets.index')
+                ->with('success', 'Data Pasien ' . $pet->nama . ' berhasil diperbarui!');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Gagal memperbarui Pasien: ' . $e->getMessage());
         }
     }
-
 
     // Ras Hewan yang muncul sesuai dengan Jenis Hewan yang dipilih (AJAX)
     public function getRasByJenis($id)

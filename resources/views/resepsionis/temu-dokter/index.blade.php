@@ -28,10 +28,10 @@
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Status</th>
                         <th>Pasien (Pet)</th>
                         <th>Pemilik</th>
                         <th>Dokter</th>
+                        <th>Status</th>
                         <th>Waktu Temu</th>
                         <th>Aksi</th>
                     </tr>
@@ -39,7 +39,11 @@
                 <tbody>
                     @forelse ($temuDokters as $temu)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $loop->iteration }}</td>                            
+                            <td>{{ $temu->pet?->nama ?? 'N/A' }}</td> 
+                            <td>{{ $temu->pet?->pemilik?->nama_pemilik ?? 'N/A' }}</td>
+                            <td>{{ $temu->roleUser?->user?->nama ?? 'N/A' }}</td> 
+                            
                             <td>
                                 @php
                                     $statusClass = '';
@@ -50,10 +54,6 @@
                                 @endphp
                                 <span class="status-badge {{ $statusClass }}">{{ $temu->status }}</span>
                             </td>
-                            
-                            <td>{{ $temu->pet?->nama ?? 'N/A' }}</td> 
-                            <td>{{ $temu->pet?->pemilik?->nama_pemilik ?? 'N/A' }}</td>
-                            <td>{{ $temu->roleUser?->user?->nama ?? 'N/A' }}</td> 
                             
                             <td>
                                 <strong>{{ \Carbon\Carbon::parse($temu->tanggal_temu)->translatedFormat('d M Y') }}</strong><br>

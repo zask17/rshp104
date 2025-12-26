@@ -31,9 +31,10 @@
                     <th>ID</th>
                     <th>Nama Pasien</th>
                     <th>Pemilik</th>
-                    <th>Jenis</th>
-                    <th>Ras</th>
+                    <th>Jenis Hewan</th>
+                    <th>Ras Hewan</th>
                     <th>Kelamin</th>
+                    <th>Warna / Tanda</th> {{-- Tambah Header Baru --}}
                     <th>Tanggal Lahir</th>
                     <th>Aksi</th>
                 </tr>
@@ -42,12 +43,12 @@
                 @forelse ($pets as $pet)
                 <tr>
                     <td>{{ $pet->idpet }}</td>
-                    {{-- FIX: Ubah nama_pet ke nama (sesuai Model) --}}
                     <td><strong>{{ $pet->nama }}</strong></td> 
                     <td>{{ $pet->pemilik->nama_pemilik ?? 'N/A' }}</td>
-                    <td>{{ $pet->jenisHewan->nama_jenis_hewan ?? 'N/A' }}</td>
+                    <td> {{ $pet->jenisHewan->nama_jenis_hewan ?? 'N/A' }} </td>
                     <td>{{ $pet->rasHewan->nama_ras ?? 'N/A' }}</td>
                     <td>{{ $pet->jenis_kelamin }}</td>
+                    <td>{{ $pet->warna_tanda ?? '-' }}</td> {{-- Tambah Data Warna/Tanda --}}
                     <td>{{ $pet->tanggal_lahir }}</td>
                     <td class="action-buttons">
                         {{-- Button Edit --}}
@@ -59,8 +60,7 @@
                         <form action="{{ route('admin.pets.destroy', $pet->idpet) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            {{-- FIX: Ubah nama_pet ke nama --}}
-                            <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data pasien {{ $pet->nama }}? Tindakan ini tidak dapat dibatalkan jika ada rekam medis terkait.')">
+                            <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data pasien {{ $pet->nama }}?')">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
                         </form>

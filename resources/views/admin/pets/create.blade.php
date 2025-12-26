@@ -122,7 +122,6 @@
 
             {{-- Warna --}}
             <div class="form-group">
-                {{-- FIX: Ubah 'warna' ke 'warna_tanda' --}}
                 <label for="warna_tanda">Warna / Tanda Khas</label>
                 <input
                     type="text"

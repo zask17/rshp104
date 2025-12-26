@@ -19,8 +19,8 @@ class TemuDokterController extends Controller
         // FIX: Menggunakan 'idreservasi_dokter' untuk pengurutan
         $temuDokters = TemuDokter::whereDate('tanggal_temu', '!=', now()->toDateString()) // Hanya Janji Temu non-harian
                             ->with(['pet.pemilik', 'roleUser.user'])
-                            ->orderBy('tanggal_temu', 'desc') 
-                            ->orderBy('waktu_temu', 'desc')
+                            ->orderBy('tanggal_temu', 'asc') 
+                            ->orderBy('waktu_temu', 'asc')
                             ->get();
         
         return view('resepsionis.temu-dokter.index', compact('temuDokters'));
@@ -68,7 +68,7 @@ class TemuDokterController extends Controller
         try {
             // Logika sederhana untuk no_urut (ambil no urut terakhir hari ini)
             $lastTemu = TemuDokter::whereDate('tanggal_temu', $request->tanggal_temu)
-                                  ->orderBy('no_urut', 'desc')
+                                  ->orderBy('no_urut', 'asc')
                                   ->first();
             $no_urut = ($lastTemu ? $lastTemu->no_urut : 0) + 1;
 
